@@ -1,0 +1,23 @@
+1. Correr fasqc para el control de calidad
+fastqc /home/alumno02/TFM/AnalisisDeRNAseq/data/1_Archivos_fastq/*.fastq.gz -o /home/alumno02/TFM/AnalisisDeRNAseq/Output/1_FastQC
+
+2. Ver en conjunto con multiqc
+multiqc /home/alumno02/TFM/AnalisisDeRNAseq/Output/1_FastQC -o /home/alumno02/TFM/AnalisisDeRNAseq/Output/2_MultiQC
+
+3. Correr el trimgalore
+Anexo 2
+
+4. Volver a ver en conjunto con multiqc
+multiqc /home/alumno02/TFM/AnalisisDeRNAseq/Output/3_FastQC-trimmed -o /home/alumno02/TFM/AnalisisDeRNAseq/Output/4_MultiQC-trimmed
+
+5. Generar el indice para STAR
+Anexo 3
+
+6. Correr STAR
+Anexo 4
+
+7. Ver la calidad del mapeo con qualimap
+Anexo 5
+
+8. Contaje con featurecounts
+Anexo 6
