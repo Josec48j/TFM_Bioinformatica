@@ -1,0 +1,937 @@
+%--------------------------------------------------------------------
+% MEMORIA TIPO TRABAJO CIENTÍFICO – 25 págs máx., 1 columna
+%--------------------------------------------------------------------
+
+\documentclass[10pt,a4paper]{article}
+
+% ==================== PREÁMBULO ====================
+% ----- Configuración de fuente principal -----
+\usepackage{fontspec}            % Para usar fuentes del sistema
+\setmainfont{Times New Roman}                % Texto principal
+\usepackage[spanish]{babel}      % División silábica y títulos en español
+
+% ----- Listas y espaciado entre párrafos -----
+\usepackage{enumitem}  % Listas personalizadas (enumerate, itemize)
+\usepackage{parskip}    % Elimina sangría y añade espacio vertical entre párrafos
+\usepackage{setspace}   % Control de interlineado
+\setstretch{1}          % Espaciado sencillo
+
+% ----- Colores personalizados -----
+\usepackage{xcolor}
+\definecolor{carmine}{RGB}{150,0,24}  % Color carmín para títulos y elementos destacados
+
+% ----- Márgenes del documento -----
+\usepackage{geometry} % Márgenes
+\geometry{
+  left=2.5cm,    % margen izquierdo
+  right=2.5cm,   % margen derecho
+  top=2cm,       % margen superior
+  bottom=2cm     % margen inferior
+}
+
+% ----- Hiperenlaces -----
+\usepackage{hyperref}     % Enlaces clicables dentro del PDF
+\hypersetup{
+  colorlinks=true,        % Usa color en lugar de recuadros
+  linkcolor=black,        % Enlaces internos (figuras, secciones...)
+  urlcolor=black,         % Enlaces externos (URLs)
+  citecolor=black         % Enlaces bibliográficos
+   % hidelinks            % ← si prefieres “invisible” (sin color ni marco)
+}
+
+% ----- Gestión de citas y bibliografía -----
+\usepackage{csquotes}     % Comillas tipográficas adaptadas al idioma
+\usepackage[            
+  backend      = biber,
+  style        = numeric-comp,  % Citas numéricas [1–n]
+  sorting      = none,          % Orden por aparición
+  giveninits   = true,          % Iniciales de nombres propios
+  maxbibnames  = 99,            % Mostrar todos los autores, sin "et al."
+  language     = spanish,
+  isbn=false,
+  doi=true
+]{biblatex}
+\addbibresource{referencias.bib} % Archivo de bibliografía
+
+% Personalización de formato de citas
+\renewcommand*{\multinamedelim}{\addcomma\space} % Separador entre autores
+\renewcommand*{\finalnamedelim}{\addcomma\space} % Sin "y" antes del último autor
+\DeclareFieldFormat*{title}{#1}                   % Título sin comillas
+\renewbibmacro{in:}{}                             % Elimina el "In:" previo a revistas/libros
+\DeclareFieldFormat[article]{journaltitle}{\mkbibemph{#1}} % Revista en cursiva
+\DeclareNameAlias{author}{family-given}           % Orden "apellidos, nombre"
+\AtBeginBibliography{\small\bibfontspec}         % Tamaño y fuente para la bibliografía
+
+% Fuente para bibliografía (coherente con el texto principal)
+\newfontfamily\bibfontspec{Times New Roman}
+
+% ----- Configuración tipográfica y cortes -----
+\emergencystretch=2em  % Evitar cortes de palabra excesivos
+
+% ----- Control de ubicación de flotantes -----
+\usepackage{placeins}   % \FloatBarrier para forzar posiciones de figuras/tablas
+
+% ==================== PAQUETES PARA FIGURAS Y TABLAS ====================
+\usepackage{graphicx}     % Inclusión de imágenes
+\usepackage{caption}      % Configuración de pies de figura
+\usepackage{subcaption}   % Subfiguras y subtítulos
+\usepackage{booktabs}     % Líneas profesionales en tablas
+\usepackage{multirow}     % Celdas que abarcan varias filas
+\usepackage{tabularx}     % Columnas de ancho automático
+\usepackage{array}        % Columnas con formatos personalizados
+\newcolumntype{C}[1]{>{\centering\arraybackslash}m{#1}} % Tipo C (centrada) para tablas
+\captionsetup[figure]{labelfont=bf,labelsep=period} % "Figura N." en negrita
+\usepackage{makecell}     % Celdas con múltiples líneas
+\addto\captionsspanish{\renewcommand{\tablename}{Tabla}} % Renombrar "Cuadro" a "Tabla"
+
+%--------------------------------------------------------------------
+\begin{document}
+
+%=====================================================
+% PORTADA 
+%=====================================================
+\pagenumbering{gobble}        % desactiva números
+\begin{titlepage}
+  \centering
+  %——— Cabecera con dos logotipos ———
+  \begin{minipage}[t]{0.48\textwidth}
+    \raggedright
+    \includegraphics[height=2.5cm]{LogoUMU.png}
+  \end{minipage}%
+  \hfill
+  \begin{minipage}[t]{0.48\textwidth}
+    \raggedleft
+    \includegraphics[height=2.5cm]{LogoBiologia.png}
+  \end{minipage}
+
+  \vspace{2cm}
+
+  {\fontsize{18pt}{22pt}\selectfont\textbf{TRABAJO FIN DE MÁSTER EN BIOINFORMÁTICA}\\[0.3em]}
+   {\fontsize{16pt}{20pt}\bfseries\color{carmine}
+     Facultad de Biología -- Universidad de Murcia
+  }
+  \vspace{1cm}
+    
+    %——— Título de la portada ———
+  {\fontsize{18pt}{22pt}\selectfont\bfseries
+    Impacto transcriptómico de la somatostatina-6 en un modelo de inflamación inducido por λ-carragenina en la dorada (\textit{Sparus aurata})\\[0.5em]
+  }
+  
+  %——— Imagen justo debajo del título ———
+  \vspace{1cm}   % ajusta la separación vertical
+  \begin{center}
+    \includegraphics[width=0.6\textwidth]{portada.png}
+  \end{center}
+  \vspace{0.5cm}     % ajusta la separación tras la imagen  
+  
+   %——— Autor y curso ———
+{\fontsize{18pt}{22pt}\selectfont
+    \textbf{Autor}\\
+    Jose Carlos Campos Sánchez\\[1.5em]
+    \textbf{Curso}\\[0.5em]
+    2024--2025
+  }
+  \vspace{3em}
+
+  %——— Tutores, en una sola línea ———
+  {\fontsize{12pt}{14pt}\selectfont
+    \textbf{Tutores:} Dña.\ María Ángeles Esteban Abad \quad\quad Dña.\ María Teresa Rubio Martínez‐Abarca
+  }
+
+  \vfill
+\end{titlepage}
+
+%=====================================================
+% PÁGINA EN BLANCO
+%=====================================================
+\newpage
+\thispagestyle{empty}
+\mbox{}
+
+% =====================================================
+% PÁGINA CON FRASE (centrada verticalmente)
+% =====================================================
+\newpage
+\thispagestyle{empty}
+\vspace*{\fill}
+\begin{flushright}
+  \itshape
+  ``La vida consiste en una serie de momentos en los que debes elegir el \\
+  camino a seguir. El camino fácil no es el de vivir, así que coge lo \\ 
+  necesario para pasar por el camino difícil''\\[1.5em]
+  \normalfont
+  JoseC, 2015
+\end{flushright}
+\vspace*{\fill}
+
+%=====================================================
+% PÁGINA EN BLANCO
+%=====================================================
+\newpage
+\thispagestyle{empty}
+\mbox{}
+
+% =====================================================
+% AGRADECIMIENTOS  (sin numerar)
+% =====================================================
+\newpage
+\section*{Agradecimientos}
+Quiero empezar dando mi más sincero y profundo agradecimiento a mi principal tutora y jefa, \textbf{Marian}. Tú fuiste la primera en apostar por mí, ofreciéndome prácticamente la oportunidad de mi vida para adentrarme en la investigación. Sin tu confianza inicial, tu impulso y tu apoyo incondicional, nada de esto habría sido posible. Siempre lo llevaré grabado en mi memoria y te debo muchísimo más de lo que estas líneas pueden expresar.
+
+También quiero agradecer de corazón a \textbf{Teresa} y a \textbf{Fernando} (mi otro co-tutor "bajo las sombras"), quienes me han acompañado firmemente en la vertiente de bioinformática. Gracias por estar siempre pendientes, por darme plena libertad para explorar mis ideas y por ofrecerme guía experta justo cuando la necesitaba. Vuestra combinación de confianza y supervisión ha sido clave para que este proyecto tomara forma.
+
+A mis compañeros del \textbf{Departamento de Biología Celular e Histología}, en especial a \textbf{Fran}, \textbf{Pepe} y \textbf{Ricardo}, de quienes guardo las mejores palabras. También a \textbf{Cristóbal} y \textbf{Claudia}, que hicieron posible este proyecto y con los que he compartido momentos muy buenos a lo largo de los años. 
+
+Obviamente, también agradecer a mis compañeros de mi grupo actual de investigación de \textbf{Estrategias antivirales} de la Universidad de Elche, en especial a mi actual jefa \textbf{María del Mar} y a \textbf{Veronica}, quienes me han facilitado por todos los medios que pueda terminar este proyecto, y que en breves tendré que compensarselo como es debido!
+
+A mis \textbf{compañeros y compañeras del Máster en Bioinformática}, por todos los momentos compartidos y por hacer de este año una experiencia que siempre llevaré en mi recuerdo.
+
+A \textbf{mis padres}, pilares inquebrantables de mi vida: gracias por estar ahí en cada paso. Vuestro apoyo silencioso y vuestro amor incondicional han sido el refugio que me ha sostenido en los momentos de duda.
+
+Y, por supuesto, a mi pareja, \textbf{mi señorita T}. Este año ha puesto a prueba nuestra paciencia, nuestro ánimo y nuestra complicidad. Gracias por quedarte a mi lado en las buenas y, sobre todo, en las no tan buenas, soportando mis horas interminables frente al ordenador y mis crisis existenciales. Es gracias a ti que encuentro la energía necesaria para afrontar los días más duros. Sin ti, estoy seguro de que no podría superar todo lo que me yo mismo me hecho encima. ¡Gracias y te quiero!
+
+A todos vosotros, gracias de corazón por hacer posible este camino.
+
+
+% =====================================================
+% ÍNDICE (TOC)  – ÚLTIMA PÁGINA SIN NÚMERO
+% =====================================================
+\newpage
+\tableofcontents        % genera índice
+\clearpage              % asegura salto
+
+% =====================================================
+% A PARTIR DE AQUÍ — PÁG. 1
+% =====================================================
+\pagenumbering{arabic}  % activa números arábigos
+
+% ---------- LISTA DE FIGURAS ----------
+\section*{Lista de Figuras}
+\addcontentsline{toc}{section}{Lista de Figuras}
+\begin{enumerate}[label=\textbf{Figura \arabic*.}, leftmargin=*, align=left]
+  \item Representación esquemática del proceso inflamatorio agudo y sus fases en mamíferos y peces.
+  \item Comparación conceptual entre acuicultura ideal y real.
+  \item Fotografías representativas y comparativas de los efectos de λ-carragenina en la pata trasera derecha de una rata y en la piel de una dorada (\textit{S.\ aurata}).
+  \item Efecto diferencial de somatostatina y cortistatina de mamíferos según su afinidad por distintos receptores.
+  \item Diseño experimental del estudio sobre inflamación inducida por λ-carragenina y tratamiento con somatostatina (SST6) en dorada (\textit{S.\ aurata}).
+  \item Diagrama de flujo del análisis bioinformático de datos RNA-seq en muestras de piel y cerebro de dorada (\textit{S.\ aurata}).
+  \item Control de sesgos de conteos obtenidos a partir de muestras de RNA de piel y cerebro de dorada (\textit{S.\ aurata}) inyectadas con PBS, λ-carragenina, SST6 o λ-carragenina + SST6, y evaluados con NOISeq.
+  \item Análisis exploratorio y detección de muestras atípicas de conteos obtenidos a partir de muestras de RNA de piel y cerebro de dorada (\textit{S.\ aurata}) inyectadas con PBS, λ-carragenina, SST6 o λ-carragenina + SST6.
+  \item Agrupamiento muestral y patrón global de expresión tras la normalización realizada con DESeq2 de los conteos obtenidos a partir de muestras de RNA de piel y cerebro de dorada (\textit{S.\ aurata}) inyectadas con PBS, λ-carragenina, SST6 o λ-carragenina + SST6.
+  \item Comparación integrada de patrones transcriptómicos de muestras de RNA de piel y cerebro de dorada (\textit{S.\ aurata}) inyectadas con PBS, λ-carragenina, SST6 o λ-carragenina + SST6. 
+  \item Diagramas de burbujas (GSEA) de los diez términos más informativos observados en la piel de dorada (\textit{S.\ aurata}) combinando los resultados de las tres bases de datos estudiadas (GO, KEGG y Reactome). 
+  \item Detalle de rutas KEGG en la piel de la dorada (\textit{S.\ aurata}).
+  \item Diagramas de burbujas (GSEA) de los diez términos más informativos observados en el cerebro de dorada (\textit{S.\ aurata}) combinando los resultados de las tres bases de datos estudiadas (GO, KEGG y Reactome).
+  \item Detalle de rutas KEGG en el cerebro de la dorada (\textit{S.\ aurata}).
+\end{enumerate}
+
+% ---------- LISTA DE ABREVIATURAS ----------
+\section*{Lista de Abreviaturas}
+\addcontentsline{toc}{section}{Lista de Abreviaturas}
+\setlength{\tabcolsep}{60pt}  % por defecto 6pt, aquí lo duplicamos
+\begin{tabular}{@{}ll@{}}
+\textbf{Sigla} & \textbf{Nombre completo} \\ \midrule
+ACTI & Área Científica y Técnica de Investigación \\
+APC  & Célula presentadora de antígeno \\
+ASIC3 & \textit{Acid-Sensing Ion Channel 3} \\
+ATF3& \textit{Activating Transcription Factor 3} \\
+BAM  & \textit{Binary Alignment Map} \\
+CGRP & \textit{Calcitonin Gene-Related Peptide} \\
+COX-2 & Ciclooxigenasa-2 \\
+CPM  & \textit{Counts Per Million} \\
+CST  & Cortistatina \\
+CT & \textit{Computed Tomography} \\
+DAG & Diacilglicerol \\
+DEGs & \textit{Differentially Expressed Genes} \\
+EDTA & Ácido etilendiaminotetraacético \\
+GABA	 & Ácido γ-aminobutírico \\
+GC (%) & Contenido de guanina-citosina \\
+GSEA & \textit{Gene Set Enrichment Analysis} \\
+GO BP	 & \textit{Gene Ontology: Biological Process} \\
+GHSR1 & \textit{Growth Hormone Secretagogue Receptor 1} \\
+HPI & Eje hipotálamo-pituitaria-interrenal \\
+IKK & \textit{IκB Kinase} \\
+IFN-γ & Interferón gamma \\
+IL-1β & Interleucina-1 beta \\
+IL-4	& Interleucina-4 \\
+IL-6 & Interleucina-6 \\
+IMIB & Instituto Murciano de Investigación Biosanitaria \\
+KEGG & \textit{Kyoto Encyclopedia of Genes and Genomes} \\
+log₂FC & \textit{Log2 Fold Change} \\
+MAD & \textit{Median Absolute Deviation} \\
+MAPK	 & \textit{Mitogen-Activated Protein Kinase} \\
+MEIOB &  \textit{Meiosis specific with OB-fold} \\
+MrgX2 & \textit{Mas-related G-protein-coupled Receptor X2} \\
+NES	 & \textit{Normalized Enrichment Score} \\
+NFE2L2 & \textit{Nuclear Factor Rrythroid 2-Related Factor 2} \\
+NF-κB & \textit{Nuclear Factor κB} \\
+ODS & Objetivos de Desarrollo Sostenible \\
+ORA & \textit{Over-Representation Analysis} \\
+PAMPs & Patrones Moleculares Asociados a Patógenos \\
+pb & Par de bases \\
+PBS & \textit{Phosphate-Buffered Saline}  \\
+PCA & Principal Component Analysis \\
+PC1 / PC2 & Primera / segunda componente principal \\
+PKA & \textit{Protein Kinase A} \\
+PKCε & \textit{Protein Kinase C épsilon} \\
+PPAR & \textit{Peroxisome Proliferator-Activated Receptor} \\
+PTEN & \textit{Phosphatase and Tensin Homolog} \\
+RIN & \textit{RNA Integrity Number} \\
+RNA-seq & \textit{RNA sequencing} \\
+ROS & \textit{Reactive Oxygen Species} \\
+SNC	 & Sistema nervioso central \\
+SP & Sustancia P \\
+SSTR1-5 & \textit{Somatostatin Receptors subtypes 1-5} \\
+SST & Somatostatina \\
+SST6 & Somatostatina-6 \\
+STAR & \textit{Spliced Transcripts Alignment to a Reference} \\
+TAK1 & \textit{Transforming Growth Factor-β-Activated Kinase 1} \\
+TNF-α & \textit{Tumor Necrosis Factor alfa} \\
+TRPA1 & \textit{Transient Receptor Potential Ankyrin 1} \\
+TRPV1 & \textit{Transient Receptor Potential Vanilloid 1} \\
+UMU & Universidad de Murcia \\
+VIP & \textit{Vasoactive Intestinal Peptide} \\
+\end{tabular}
+% si solo quieres que afecte a esta tabla y no al resto, puedes:
+\setlength{\tabcolsep}{6pt}   % volver a valor por defecto
+
+
+\newpage
+
+%=====================================================
+%Resumen
+%=====================================================
+\begin{center}
+\section*{Resumen}
+\addcontentsline{toc}{section}{Resumen}
+\end{center}
+
+La inflamación es un proceso defensivo esencial en el mantenimiento y preservación de la homeostasis de los organismos, así como en su restauración cuando su integridad se ve comprometida. En acuicultura, el control de la inflamación condiciona tanto el bienestar de los peces como la eficiencia productiva, pero la ausencia de signos clínicos evidentes y la naturaleza ectotérmica de estos vertebrados complican su diagnóstico, de forma que, aun con décadas de investigación en mamíferos, el conocimiento de su regulación neuroinmune en teleósteos permanece limitado. Partiendo de esta necesidad, utilizamos la λ-carragenina como modelo de inflamación estéril en la dorada (\textit{Sparus aurata}) y evaluamos el potencial modulador y anti-inflamatorio de la somatostatina-6 (SST6), un posible análogo funcional de la cortistatina (CST) de mamíferos, mediante un análisis transcriptómico de alto rendimiento. Para ello, treinta y seis juveniles de dorada fueron distribuidos en cuatro grupos (Control, λ-carragenina, SST6 y λ-carragenina + SST6) en función de la solución inyectada y a los 3 días después de la inyección, se obtuvieron muestras de piel y cerebro para realizar un análisis de RNAseq. Tras la extracción de RNA se construyeron las bibliotecas (\textit{paired-end} $2 \times 100$ pb; $\ge 25$ M lecturas/muestra) y los datos se procesaron con un flujo de análisis estándar que incluyó control de calidad (FastQC, Trim Galore), alineamiento al genoma de dorada (STAR), cuantificación (featureCounts) y análisis de expresión diferencial (DESeq2). El enriquecimiento funcional se realizó con ortólogos del pez cebra (\textit{Danio rerio}) mediante GSEA (GO BP, KEGG, Reactome). Los resultados de expresión diferencial y enriquecimiento funcional evidenciaron la mayor reprogramación transcriptómica en el grupo de λ-carragenina (3.407 DEGs en piel y 1.068 en cerebro), en el cual se vieron enriquecidas positivamente rutas proinflamatorias y proapoptóticas (respuesta inmunitaria adaptativa, NF-κB/TAK1, apoptosis y remodelado epigenético) y enriquecidas negativamente rutas implicadas en neurogénesis y respuesta innata. En cambio, en la piel la administración aislada de SST6 exhibió un papel integrador del sistema neuroinmune, potenciando procesos de respuesta inmediata al estrés, la desgranulación de neutrófilos y la inmunidad innata, al tiempo que atenuó vías de presentación antigénica y moduló negativamente genes vinculados al ritmo circadiano. Sin embargo, donde SST6 ejerció su mayor efecto fue en el cerebro, en el cual activó rutas asociadas al desarrollo cerebral y sensorial, todas ellas claves para mantener una comunicación eficiente entre neuronas y reforzar la plasticidad neuronal. Además, cuando SST6 se coadministró con λ-carragenina, redujo un 40\% los DEGs cutáneos, invirtió la dirección de genes clave en la regulación de respuestas antioxidantes frente a daños oxidativos, y reactivó rutas de resolución lipídica, queratinización y citoesqueleto muscular. Nuevamente, fue en el cerebro donde se vio un mayor cambio en los patrones de expresión, donde atenuó rutas de muerte celular y sumoilación mientras potenció vías neurotróficas y antioxidantes. De esta manera, SST6 promovió la transición desde un perfil inflamatorio-apoptótico hacia uno orientado a reparación tisular, activación linfocitaria regulada y neuroprotección. Estos hallazgos señalan a SST6 como modulador del eje neuroinmune con gran potencial anti-inflamatorio, y candidato prometedor para estrategias que mejoren la resiliencia y la salud de los peces de cultivo frente a procesos inflamatorios.
+
+\vspace{1em}
+\noindent\textbf{Palabras clave:} Inflamación; Eje neuroinmune; λ-carragenina; somatostatina-6 (SST6); Dorada (\textit{Sparus aurata}).
+
+\newpage
+
+%====================================================
+%INTRODUCCIÓN
+%=====================================================
+
+\section{Introducción}
+La inflamación, del latín \textit{inflammo}, que significa “arder” o “quemar”, es un proceso biológico muy complejo, dinámico y altamente regulado mediante el cual el sistema inmunitario innato, como primera línea defensiva del organismo, es capaz de responder a agresiones infecciosas, traumáticas, químicas, autoinmunes o neoplásicas \parencite{Du2015}. Su propósito fundamental es contener, neutralizar y eliminar al agente nocivo si lo hubiera y, acto seguido, iniciar la reparación tisular para restaurar la homeostasis inicial del organismo \parencite{Chen2010}. En la fase aguda de la inflamación, y desde un punto de vista histopatológico, las células residentes responden al estimulo inicial liberando de forma inmediata mediadores proinflamatorios como citoquinas, neurotransmisores y neuropéptidos \parencite{Bordes1994} (Fig.~\ref{fig:1}). Estas moléculas desencadenan rápidos cambios vasculares (vasodilatación, aumento de permeabilidad y redistribución del flujo sanguíneo) que facilitan la llegada de moléculas efectoras y leucocitos al foco de la lesión \parencite{Larsen1983}. Este fenómeno favorece el reclutamiento y la activación de granulocitos, monocitos/macrófagos y linfocitos, guiados por una cascada de citoquinas, quimioquinas, eicosanoides y aminas vasoactivas \parencite{Kolaczkowska2013}. En paralelo, las señales de peligro son recogidas por fibras aferentes sensoriales que transmiten la información al sistema nervioso central (SNC). Tras su procesamiento, el SNC activa fibras eferentes autonómicas locales de origen simpático, que liberan noradrenalina para modular la vasoconstricción, la permeabilidad vascular y el reclutamiento leucocitario, y de origen parasimpático, que liberan acetilcolina para favorecer la vasodilatación y ajustar la permeabilidad \parencite{Kelly2022}. Además, se liberan neuropéptidos como sustancia P (SP) o el péptido relacionado con el gen de calcitonina (CGRP) para regular de manera precisa la respuesta inflamatoria \parencite{Cuesta2002}. De este modo, la inflamación se convierte en un circuito neuroinmune bidireccional que modula su propia intensidad y duración, garantizando así la eliminación eficaz del agresor. Una vez neutralizado el estímulo, los leucocitos entran en apoptosis o, en el caso de los macrófagos, se polarizan hacia un fenotipo anti-inflamatorio. Al mismo tiempo, los mecanismos de resolución son activados y se produce la liberación de citoquinas anti-inflamatorias, lipoxinas, resolvinas, hormonas como los glucocorticoides y otros mediadores proresolutivos que detienen la respuesta, promueven la fagocitosis de restos celulares y desencadenan la remodelación de la matriz extracelular \parencite{Maderna2009}. Clínicamente, la inflamación aguda suele durar horas o días y se manifiesta con los cinco signos cardinales descritos por la medicina romana: \textit{rubor} (enrojecimiento), \textit{calor} (aumento de temperatura), \textit{tumor} (edema), \textit{dolor} y \textit{functio laesa} (pérdida o alteración de la función) \parencite{Lawrence2002}. Estos signos evidencian la naturaleza protectora de la inflamación, pero también ponen de relieve que, si la respuesta se vuelve excesiva, prolongada o mal controlada, puede cronificarse (inflamación crónica) y promover fibrosis, angiogénesis aberrante, daño tisular progresivo e incluso carcinogénesis \parencite{Nathan2010}. Por lo tanto, la inflamación constituye una alarma molecular finamente orquestada que debe ser suficientemente potente como para erradicar la amenaza, y lo bastante efímera para preservar la integridad del huésped.
+
+\begin{figure}[ht]
+  \centering
+   %\includegraphics[width=\linewidth]{Figura_1.png}
+    \includegraphics[width=0.85\linewidth]{Figura_1.png} 
+
+  \caption{Representación esquemática del proceso inflamatorio agudo y sus fases en mamíferos y peces. Tras una lesión, las células residentes liberan mediadores proinflamatorios que inducen cambios a nivel sistémico, los cuales favorecen los signos inflamatorios de \emph{tumor}, \emph{calor} y \emph{rubor}. Los signos de \emph{calor} y \emph{rubor} no son apreciables en peces por la presencia de escamas y su naturaleza ectodérmica. Estos cambios permiten el reclutamiento de células inmunitarias desde la médula ósea en mamíferos o el riñón cefálico en peces. Paralelamente, el sistema nervioso central detecta señales nociceptivas produciendo  \emph{dolor}, el cual no está caracterizado en peces. Además, el sistema nervioso modula la respuesta inflamatoria a través de vías simpáticas y parasimpáticas, incluyendo la liberación de neuropéptidos. Si el estímulo es controlado, la inflamación progresa hacia una fase de regulación y reparación; en caso contrario, puede cronificarse produciendo \emph{pérdida de función}.}
+  \label{fig:1}
+\end{figure}
+
+En la acuicultura actual, la inflamación trasciende el interés fisiopatológico para convertirse en un indicador clave de bienestar y rentabilidad. Sin embargo, en peces, la identificación clínica de esta respuesta presenta importantes limitaciones, ya que varios de los signos clásicos observados en mamíferos, como el enrojecimiento o el calor local, son difíciles de detectar debido a la presencia de escamas o a la naturaleza ectotérmica de estos organismos. Asimismo, la percepción del dolor en peces sigue siendo objeto de debate científico, aunque la presencia de nociceptores sí que ha sido demostrada \parencite{Sneddon2015,Sneddon2003}. Estos factores hacen necesario adaptar cuidadosamente los criterios diagnósticos y subrayan la importancia de caracterizar profundamente la inflamación en peces desde una perspectiva comparativa y específica, para así asegurar estrategias de manejo efectivas y mejorar el bienestar animal en sistemas de cultivo intensivo.
+
+En las últimas décadas, el rápido y continuo crecimiento de la acuicultura en el sector de la producción de alimentos, no sólo ha superado los niveles de la pesca, sino que también se ha convertido en la fuente más importante de alimentos de origen acuático \parencite{FAO2024}. Sin embargo, para abastecer esta elevada demanda del mercado, las prácticas intensivas y la gestión rutinaria de la piscicultura (por ejemplo, la clasificación por tamaños, la vacunación, el transporte, o el hacinamiento) pueden deteriorar la calidad del agua, inducir hipoxia y provocar oscilaciones de pH o temperatura que, a menudo, comprometen el bienestar de los peces de cultivo \parencite{Saraiva2022} (Fig.~\ref{fig:2}). Principalmente, estas condiciones exponen a los peces a un estrés crónico que activa el eje hipotálamo-pituitaria-interrenal (HPI) y produce una liberación mantenida de cortisol. Este glucocorticoide es capaz de inhibir la inmunidad innata debilitando la barrera cutánea y favoreciendo las infecciones de patógenos oportunistas \parencite{Azeredo2022}. De esta manera, las lesiones focales pueden evolucionar hacia inflamaciones descontroladas causando pérdidas económicas considerables \parencite{Balcazar2006,Esteban2012}. En este contexto, entender los mecanismos que regulan la inflamación en peces exige abordarla como una respuesta integrada e interconectada entre los sistemas neuroendocrino e inmunitario y no sólo como un fenómeno tisular. Sin embargo, y a pesar de los avances recientes, la respuesta inflamatoria de los peces teleósteos permanece escasamente caracterizada con respecto a la de los mamíferos, circunstancia que subraya la necesidad de disponer de modelos experimentales que repliquen con fidelidad las singularidades y dinámicas inmunitarias de las especies de cultivo y promuevan el desarrollo de estrategias profilácticas y terapéuticas efectivas.
+
+
+\begin{figure}[ht]
+  \centering
+   \includegraphics[width=\linewidth]{Figura_2.png}
+
+  \caption{Comparación conceptual entre acuicultura ideal y real. A la izquierda se ilustra un entorno productivo óptimo sin estrés, mientras que el panel derecho resume los estresores habituales (hacinamiento, calidad del agua, vacunación y transporte) que activan el eje hipotálamo-pituitaria-interrenal (HPI) de los peces de cultivo, aumentando el cortisol. Este glucocorticoide actúa inhibiendo el sistema inmunitario, haciendo a los peces más susceptibles al desencadenamiento de inflamación, con repercusión final en el bienestar de los animales y en pérdidas económicas para el propio sector.}
+  \label{fig:2}
+\end{figure}
+
+En este contexto, la λ-carragenina, un polisacárido sulfatado de elevado peso molecular obtenido de la pared celular de algas rojas (familia Rhodophyceae) y con tres grupos sulfato por disacárido, se erigió como un modelo prototípico de inflamación aguda y dolor en roedores tras la descripción del edema plantar por Winter y colaboradores (1962) \parencite{Winter1962} (Fig.~\ref{fig:3}). Los efectos de su administración subcutánea desencadenan un edema cutáneo bifásico ampliamente descrito y caracterizado por los siguientes eventos. En primer lugar, se produce una fase neurogénica temprana en la que los grupos sulfato irritan directamente las terminaciones nerviosas cutáneas y, actúan como patrones moleculares asociados a patógenos (PAMPs) aniónicos imitando patrones microbianos, de manera que casi simultáneamente, inducen la desgranulación de mastocitos vecinos, liberando histamina, serotonina y bradicinina \parencite{Patil2017}. Estas moléculas, además de producir vasodilatación y edema facilitando la vía proinflamatoria, disparan la primera descarga de las fibras C nociceptivas, un tipo de neuronas periféricas amielínicas de conducción lenta responsables de transmitir sensaciones dolorosas y térmicas. Posteriormente, en una fase vascular tardía, los neutrófilos y macrófagos reclutados en la zona de inflamación sintetizan grandes cantidades de ciclooxigenasa-2 (COX-2) incrementando así la producción de prostaglandinas y leucotrienos. Paralelamente, citoquinas como interleuquina 1β (IL-1β) y factor de necrosis tumoral α (TNF-α), junto con mediadores como el óxido nítrico, actúan sobre receptores específicos en las terminaciones nociceptivas, activando vías intracelulares dependientes de AMPc o Ca²⁺/DAG capaces de estimular las proteinquinasas PKA y PKCε. Estas, a su vez fosforilarían canales iónicos específicos como el canal catiónico de potencial transitorio, subtipo vaniloide 1 (TRPV1), subtipo anquirina 1 (TRPA1) y el canal iónico sensible a ácido, subtipo 3 (ASIC3), aumentando su sensibilidad y promoviendo la hiperalgesia \parencite{Gouin2017,Roh2020}. Finalmente, cuando la exposición al polisacárido se prolonga más allá de las 24 horas, la transcripción sostenida de citoquinas conlleva a una cronificación del proceso inflamatorio, favoreciendo además una sensibilización periférica persistente que, al ascender por la médula, activaría la microglía espinal a través de la vía p38 MAPK, amplificando los impulsos aferentes y generalizando el dolor más allá del sitio original de inflamación \parencite{Ji2007}. Esta combinación de edema, vasodilatación sostenida y dolor (reforzado por la activación de vías sensoriales nociceptivas) ha permitido que este modelo haya sido empleado durante décadas para el cribado de fármacos anti-inflamatorios y analgésicos. Esta capacidad proinflamatoria depende directamente del grado de sulfatación, siendo la isoforma λ la variante más activa, mientras que κ y ι-carragenina pueden ejercer efectos inmunomoduladores o incluso protectores, según la dosis y la vía de administración \parencite{Cheng2008,Cheng2007}. 
+
+En teleósteos, se han desarrollado varios ensayos para tratar de estudiar la inflamación, aunque son escasos y poco sistematizados, describiéndose, por ejemplo, granulomas crónicos en la platija (\textit{Pleuronectes platessa}) \parencite{Timur1977}, infiltración leucocitaria y edema abdominal en tilapia (\textit{Oreochromis niloticus}) \parencite{Matushima1996} y pez cebra (\textit{Danio rerio}) \parencite{Huang2014}, así como respuestas inmunoestimulantes en carpa (\textit{Cyprinus carpio}) \parencite{Fujiki1997} o pacú (\textit{Piaractus mesopotamicus}) \parencite{Martins2006} tras la inyección de κ- o λ-carragenina. Nuestro grupo de investigación optimizó un modelo de inflamación en la dorada (\textit{S.\ aurata}), demostrando que una sola inyección intramuscular de λ-carragenina es capaz de producir un proceso inflamatorio estéril, reproducible y autolimitado, sin la necesidad de sacrificar a los ejemplares de estudio \parencite{CamposSanchez2021a,CamposSanchez2021b} (Fig.~\ref{fig:3}). Este proceso está caracterizado por una fase inicial de infiltración de granulocitos acidófilos (células funcionalmente equivalentes a los neutrófilos de mamíferos) y células mucosecretoras a nivel local, seguido por la llegada de macrófagos y adipocitos reguladores, que posibilita que se resuelva la inflamación con la restitución cutánea antes de veinticuatro horas \parencite{CamposSanchez2021c,CamposSanchez2022}. Este patrón temporal ha sido corroborado mediante el estudio de marcadores inmunitarios, técnicas de histología, análisis de expresión génica \textit{in vivo}, ultrasonografía y micro-CT (estas técnicas de imagen nos permitieron estudiar la evolución tridimensional de la lesión causada) \parencite{CamposSanchez2022b}. Además, hemos evidenciado que la respuesta local va acompañada de alteraciones sistémicas mediante el estudio del proteinograma sérico, de la inducción de hepcidinas y el metabolismo del hierro, y de modificaciones en el perfil de ácidos grasos \parencite{CamposSanchez2025,CamposSanchez2021d,CamposSanchez2024,CamposSanchez2024b}. Un aspecto clave de este modelo es que la piel de teleósteos actúa como una primera barrera defensiva neuroinmune, la cual está densamente inervada por fibras sensoriales que liberan neuropéptidos como SP, CGRP, péptido intestinal vasoactivo (VIP) o somatostatina (SST), los cuales son capaces de regular la vasodilatación, quimiotaxis o la liberación de especies reactivas de oxígeno (ROS), y cuyos receptores en linfocitos y macrófagos proporcionan un control homeostático de la cascada inflamatoria \parencite{Scholzen1998}. En conjunto, el modelo se consolida como una herramienta robusta y relevante para reproducir la cinética inflamatoria en teleósteos marinos y para evaluar compuestos anti-inflamatorios o biomarcadores de bienestar.
+
+\begin{figure}[ht]
+  \centering
+   \includegraphics[width=\linewidth]{Figura_3.png}
+ 
+  \caption{Fotografías representativas y comparativas de los efectos de λ-carragenina en la pata trasera derecha de una rata y en la piel de una dorada (\textit{S.\ aurata}). Modificado de  \parencite{CamposSanchez2021a, Hussein2012}.}
+  \label{fig:3}
+\end{figure}
+
+Una vez caracterizada la dinámica del modelo, abordamos el plano neuroendocrino mediante el estudio de los neuropéptidos, que son moduladores clave del eje neuroinmune, capaces de modular la intensidad y la duración de la respuesta inflamatoria. Dentro de este conjunto de moléculas, la familia SST/cortistatina (CST) es especialmente relevante. En mamíferos, un único gen \textit{sst1} codifica SST-14/28 mientras que \textit{sst2} origina CST, un péptido producido principalmente por neuronas inhibitorias GABAérgicas de la corteza cerebral e hipocampo y ampliamente distribuido en el sistema inmunitario, capaz de atenuar las citoquinas proinflamatorias IL-1β, IL-6 y TNF-α y de potenciar la citoquina anti-inflamatoria IL10 en modelos de endotoxemia, artritis y enfermedad inflamatoria intestinal  \parencite{GonzalezRey2008,DeLecea1996}. CST posee una estructura cíclica de 14 aminoácidos, 11 de ellos compartidos con SST, incluyendo los aminoácidos de su núcleo hidrofóbico (FWKT) y dos cisteínas (Cys) que son las que permiten la forma cíclica del péptido (Fig.~\ref{fig:4}) \parencite{DeLecea1996}. Debido a esta similitud estructural, CST es capaz de unirse con gran afinidad a los receptores de SST (SSTR1-5), compartiendo algunas de sus funciones. Sin embargo, CST es capaz de realizar otras funciones distintas a SST, ya que también puede interaccionar con otros tipos de receptores, como los receptores de grelina (GHSR, \textit{Growth hormone secretagogue receptor}) o el receptor MrgX2 (\textit{Mas-related G-protein-coupled Receptor X2}) \parencite{Robas2003}. En cambio, se ha visto que los teleósteos conservan hasta seis parálogos designados \textit{sst1} a \textit{sst6}, como consecuencia de duplicaciones genómicas \parencite{Very2002}. Así, los análisis filogenéticos y de sintenia realizados en nuestro laboratorio demostraron que la \textit{sst6} de dorada mantiene el motivo dibásico y la prolina en posición dos (Pro²) que caracterizan a la CST de mamíferos \parencite{CamposSanchez2025b}, los cuales favorecen su unión a receptores GHSR1 y MrgX2. Además, \textit{sst6} mostró un perfil de expresión constitutiva en el telencéfalo o cerebro anterior, así como niveles basales en tejido periféricos inmunitarios, y fue sobreexpresada de forma selectiva en leucocitos de riñón cefálico estimulados con λ-carragenina o cantaridina, mientras que los demás parálogos (\textit{sst1}, \textit{sst3}, \textit{sst4} y \textit{sst5}) permanecieron inalterados \parencite{CamposSanchez2025b}. Estos datos apuntan a un papel inmunomodulador análogo al de la CST de mamíferos y sitúan a SST6 como posible diana prometedora para el desarrollo de estrategias orientadas a potenciar la resolución inflamatoria.
+
+\begin{figure}[ht]
+  \centering
+ \includegraphics[width=0.4\linewidth]{Figura_4.png}
+ 
+  \caption{Efecto diferencial de somatostatina y cortistatina de mamíferos según su afinidad por distintos receptores. Modificado de \parencite{GonzalezRey2008}.}
+  \label{fig:4}
+\end{figure}
+
+Considerando toda esta evidencia previa, el objetivo principal de este estudio fue evaluar el potencial anti-inflamatorio de la SST6 de dorada sobre la respuesta provocada por λ-carragenina. Para contrastar esta hipótesis se diseñó un abordaje transcriptómico mediante RNA-seq, el cual es capaz de captar de forma simultánea todos los transcritos modulados por el neuropéptido. El análisis comparó la expresión génica en la piel, lugar primario de la inflamación estéril, y en el cerebro, principal reservorio de neuropéptidos, con el objetivo de determinar si la señal periférica se acompaña de una reprogramación local y central indicativa de un eje neuroinmune en la dorada. Hasta donde alcanza nuestro conocimiento, este es el primer estudio que integra un RNA-seq de piel y cerebro para caracterizar la acción anti-inflamatoria de un análogo funcional de CST en teleósteos. Los resultados podrán esclarecer si la SST-6 actúa realmente como ortólogo funcional de la CST y sentarán las bases para el desarrollo de nuevas herramientas dirigidas a reforzar el bienestar y la resiliencia de los peces de cultivo frente a procesos inflamatorios.
+
+% =====================================================
+%  MATERIALES Y MÉTODOS % =====================================================
+\section{Materiales y Métodos}
+\subsection{Animales }
+Treinta y seis ejemplares juveniles de dorada (\textit{S.\ aurata}) con un peso promedio de 52,2 ± 2,0 g y talla de 14,0 ± 0,1 cm, fueron obtenidos de una piscifactoría local (Alicante, España). Los ejemplares fueron distribuidos aleatoriamente en tanques de 450L y mantenidos en las instalaciones del grupo de investigación de “Inmunobiología para la Acuicultura” de la Universidad de Murcia (UMU) durante un tiempo de cuarentena de un mes, previo a la experimentación. La temperatura de agua se mantuvo a 20 ± 2ºC con un caudal de 600 L h\textsuperscript{-1}, una salinidad del 28 ‰, un fotoperiodo de 12 h de luz y 12 h de oscuridad y con aireación continua. Los peces fueron alimentados con una dieta comercial (Skretting, España) a una tasa del 2\% de su peso corporal al día y se mantuvieron 24 h en ayuno antes del ensayo. La manipulación de los ejemplares se realizó siempre de acuerdo con las Directrices del Consejo de la Unión Europea (2010/63/UE) y el Comité Ético de la UMU (Número de Permiso A13160416).
+
+\subsection{Diseño experimental}
+Los peces fueron anestesiados con aceite de clavo (20 mg L\textsuperscript{-1}, Guinama®) y divididos en cuatro grupos experimentales, en función de las soluciones que le fueron inyectadas intramuscularmente e intraperitonealmente (Fig.~\ref{fig:5}). La solución intramuscular estuvo compuesta por un volumen de 500µL de tampón fosfato salino (PBS, 11,9 mM de fosfato, 137 mM de NaCl y 2,7 mM de KCl, pH 7,4, Fisher Bioreagents) o de λ-carragenina al 1\% (concentración final = 10 mg pez\textsuperscript{-1}, Sigma-Aldrich), mientras que la intraperitoneal lo estuvo por 100 µL de PBS o de somatostatina 6 (SST6, 1 nM en PBS). Así, los grupos quedaron constituidos de la siguiente manera: \textit{i)} grupo inyectado con PBS intramuscular e intraperitonealmente (Grupo control), \textit{ii)} grupo inyectado con λ-carragenina y PBS (Grupo λ-carragenina), \textit{iii)} grupo inyectado con PBS y SST6 (Grupo SST6) y \textit{iv)} grupo inyectado con λ-carragenina y SST6 (Grupo λ-carragenina + SST6). Cada grupo consistió en dos tanques replicados (n = 3 peces por tanque), haciendo un total de 6 peces por grupo experimental. A los 3 días después de la inyección, los peces fueron anestesiados como se describió previamente, pesados, medidos y sacrificados. Tras la disección de los peces, se obtuvo el telencéfalo desde la parte anterior del cerebro de cada pez y una muestra de piel junto con músculo de la zona perteneciente a la inyección intramuscular. Las muestras fueron inmediatamente congeladas en nitrógeno líquido y almacenadas a -80 ºC hasta que se utilizaron para el análisis de la expresión génica.
+
+\begin{figure}[ht]
+  \centering
+ \includegraphics[width=1\linewidth]{Figura_5.png}
+ 
+  \caption{Diseño experimental del estudio sobre inflamación inducida por λ-carragenina y tratamiento con somatostatina (SST6) en dorada (\textit{S. aurata}).}
+  \label{fig:5}
+\end{figure}
+
+\subsection{Extracción de RNA, construcción de librerías y secuenciación} 
+El RNA fue extraído del cerebro y la piel (n =4) usando un RNeasy Mini Kit (Qiagen, TX, USA) siguiendo las recomendaciones del distribuidor. La integridad del RNA se confirmó mediante la evaluación de su concentración en Nanodrop y Qubit, y el análisis de su perfil con bioanalizador. Los valores de las ratios obtenidos en Nanodrop (A260/280, A260/230) se mantuvieron en torno a 2, indicando la ausencia de contaminación de proteínas (valores menores de 1,8 en la ratio A260/280) o con compuestos fenólicos, carbohidratos o EDTA (valores menores a 2 en la ratio A260/230). El fluorómetro Qubit, que específicamente mide las moléculas de RNA (evitando la interferencia en las medidas por posible contaminación de DNA), mostró cantidades óptimas de partida oscilando entre los 100-1000 ng y coincidiendo con la concentración obtenida por Nanodrop. El análisis mediante el Bioanalizador Agilent 2100 (Agilent Technologies), el cual es capaz de verificar el tamaño y cuantificar la calidad de DNA, RNA y proteínas, evidenció que las muestras no se encontraban degradadas y cumplían con parámetros RIN (número de integridad del RNA) óptimos ≥ 9. La construcción de librerías de cDNA fue llevada a cabo usando el protocolo de Illumina Stranded mRNA Prep (referencia de protocolo: 1000000124518 v02). Las librerías fueron secuenciadas usando una estrategia mediante lecturas \textit{paired-end} de $2 \times 100$ pb, con una profundidad de secuenciación mínima de 25 millones de pares de lecturas (50 millones de lecturas individuales) por muestra mediante el secuenciador NextSeq 2000 (Illumina, USA). Todo este proceso fue llevado a cabo en el servicio de Biología Molecular del Área Científica y Técnica de Investigación (ACTI) de la Universidad de Murcia (UMU).
+\newpage
+
+\subsection{Preprocesamiento de las lecturas RNA-seq}  
+El análisis de las lecturas obtenidas tras la secuenciación del RNA de las muestras de cerebro y piel (\textit{raw reads}) fue llevado en un entorno Linux, dentro del clúster de cómputo dayhoff de la UMU. Para ello se establecieron los directorios de trabajo necesarios en el clúster y se realizó el preprocesamiento de dichas lecturas utilizando comandos y scripts de \textit{bash}. Todas las herramientas y  \textit{pipelines} usadas para este trabajo fueron guardadas en la siguiente dirección de Github: \url{https://github.com/Josec48j/TFM_Bioinformatica} (Fig.~\ref{fig:6}). En primer lugar, se realizó un control de calidad mediante FastQC v0.11.9 y multiQC v1.27 (Anexo 1) para evaluar la calidad de las lecturas de secuenciación, detectando sesgos, contaminaciones o errores técnicos que pudieran comprometer el análisis posterior \parencite{Andrews2010}. En la siguiente fase, denominada trimeado o \textit{trimming}, las lecturas fueron filtradas utilizando el software Trim Galore v0.6.10 con los valores establecidos por defecto (Anexo 2) para quitar los adaptadores 'CTGTCTCTTATA' (Nextera \textit{Transposase sequence}) \parencite{Krueger2015}. Para poder organizar el genoma con una estructura eficiente para su posterior alineamiento, se generó un índice de STAR (\textit{Splices Transcripts Alignment to a Reference}), estableciendo el parámetro sjdbOverhang = longitud de lectura − 1 (99 para lecturas de 100 pb; Anexo 3) \parencite{Dobin2013}. Este parámetro hace que el índice almacene ese mismo número de bases a cada lado de cada unión exón–intrón, proporcionando suficiente anclaje para colocar correctamente las lecturas que cruzan dichas uniones. Las lecturas recortadas y libres de adaptadores se alinearon al genoma de referencia de la dorada (NCBI RefSeq: (\texttt{GCF\_900880675.1}) con el software STAR v2.7.7a y su anotación (Annotations.gtf), especificando las lecturas \textit{paired-end} (R1 y R2), el tipo de archivo de salida (BAM ordenado por coordenadas genómicas) mediante --outSAMtype BAM SortedByCoordinate y descartando las lecturas no alineadas mediante --outSAMunmapped None (Anexo 4). La calidad de los alineamientos generados con STAR fue evaluada con el software QualiMap v.2.2.2-dev, obteniendo la cobertura génica y la distribución de lecturas en exones, intrones e intergénicas (Anexo 5)  \parencite{GarciaAlcalde2012}. Finalmente, las lecturas se cuantificaron con featureCounts v2.0.3, seleccionado por su rapidez multihilo, bajo consumo de memoria RAM y la facilidad con la que acepta anotaciones GTF personalizadas, características que simplifican el flujo de trabajo al trabajar con genomas poco estandarizados, como el de la dorada \parencite{Liao2014}. En este caso se especificó nuevamente las lecturas \textit{paired-end} con el parámetro -p, y la identificación y cuantificación de genes del archivo GTF con los atributos \texttt{-g gene\_id} y \texttt{-t gene}, respectivamente (Anexo 6).
+
+\subsection{Análisis de expresión diferencial}  
+El análisis de expresión diferencial \textit{in silico} se realizó íntegramente en el clúster dayhoff utilizando el software Rstudio 4.3.0 (véase Anexo 7) \parencite{RCore2024}. Los archivos de conteo generados por featureCounts para los tejidos de piel y cerebro se importaron mediante la función \textit{process counts()} definida en el script principal. Esta función se encargó de automatizar la lectura de los archivos de conteo, filtrar genes no expresados, normalizar los identificadores de genes eliminando las versiones y asignar, mediante el uso de expresiones regulares, cada muestra a uno de los cuatro grupos experimentales: Control, λ-carragenina, SST6 y λ-carragenina + SST6. A continuación, se aplicó un riguroso control de calidad con el paquete NOISeq, diseñado específicamente para evaluar posibles sesgos en RNA seq \parencite{Tarazona2012}. Para ello, se generó previamente la tabla de anotación (\texttt{annotation\_dorada.tsv}) que incluye la longitud y el contenido GC de cada gen. Con estos datos se evaluaron los sesgos de longitud y GC, y la composición de biotipos de RNA para visualizar sesgos potenciales en los conteos crudos. Posteriormente, se implementó un filtrado de bajo recuento basado en \textit{counts per million} (CPM), reteniendo sólo los genes con CPM > 1 en al menos dos muestras para reducir el ruido de genes de muy baja expresión. Para detectar posibles valores atípicos u \textit{outliers}, se llevó a cabo un Análisis de Componentes Principales (PCA) sobre la matriz de log₂(\textit{counts} + 1), evaluando la distribución de muestras según los porcentajes de varianza explicada en PC1 y PC2. Complementariamente, se utilizó la desviación absoluta de la mediana (MAD), una métrica robusta frente a valores extremos, para calcular puntuaciones de \textit{outliers} dentro de cada condición, siendo las muestras con MAD score < –5 consideradas como atípicas, y eliminándose antes del análisis de expresión diferencial.
+
+El análisis de expresión diferencial propiamente dicho se realizó con DESeq2, el cual es capaz de ajustar un modelo estadístico que asume recuentos de distribución binomial negativa \parencite{Love2014}. Para cada gen en cada condición, estima la dispersión y el tamaño del efecto (\textit{log₂ fold change}) y aplica la corrección por comparaciones múltiples (Benjamini–Hochberg) para obtener p-valores ajustados. Para ello se extrajeron la matriz de conteos y la tabla de metadatos correspondientes a las muestras sin \textit{outliers}, se creó un objeto DESeqDataSet y se descartaron los genes con suma total de conteos < 1. Tras la normalización interna de DESeq2, que corrige las diferencias en profundidad de secuenciación entre muestras, se repitió el PCA para confirmar la correcta agrupación por condición. A continuación, se definieron todos los pares de comparaciones y se empleó la función \textit{results()} para obtener los \textit{log₂ fold changes} (|log₂FC| > 1) y los p-valores ajustados (padj < 0.05). Cada contraste se visualizó con \textit{heatmaps} y \textit{volcano plots} de genes diferencialmente expresados (DEGs). Seguidamente se evaluó el solapamiento de DEGs frente a Control mediante diagramas de Venn, que muestran genes compartidos o exclusivos entre tratamientos. Finalmente, dentro del tratamiento λ-carragenina se filtraron los genes cuyo log₂FC cambiaba de signo al compararse con λ-carragenina + SST6 y que definimos como genes "\textit{switchers}", identificando así genes modulados por λ-carragenina y revertidos por SST6 en cualquier dirección.
+
+\subsection{Análisis de enriquecimiento}  
+Debido a que la dorada no es un organismo modelo, se emplearon genes ortólogos del organismo modelo más cercano, el pez cebra (\textit{D. rerio}), mediante el módulo g:Orth de g:Profiler, BioMart de Ensembl y el paquete de anotación org.Dr.eg.db de Bioconductor \parencite{Kolberg2023}. Estos datos se organizaron en una tabla (Anexo 8) que permite vincular cada gen de dorada con sus ortólogos de pez cebra a través del identificador ENTREZ. A partir del análisis de expresión diferencial en dorada, se creó un vector ordenado de forma decreciente por el \textit{log₂ fold change}, y se realizó un enfoque de análisis de enriquecimiento de conjuntos de genes (\textit{Gene Set Enrichment Analysis, GSEA}) sobre las bases de datos \textit{Gene Ontology} (GO) \parencite{GOConsortium2019}, \textit{Kyoto Encyclopedia of Genes and Genomes} (KEGG) \parencite{Kanehisa2017} y Reactome \parencite{Milacic2024}. Se prefirió GSEA frente al método clásico de sobrerrepresentación (\textit{Overrepresentation}, ORA) porque en una sola gráfica permite distinguir rutas activadas (NES > 0) y reprimidas (NES < 0), agilizando la interpretación. Los parámetros utilizados fueron: \textit{minGSSize} = 10 (tamaño mínimo de conjunto génico) y \textit{pvalueCutoff} = 0.05 (p-valor ajustado). Los diez términos más informativos se visualizaron mediante gráficos de burbujas (material suplementario) representando los contrastes frente al grupo control. Finalmente, tras revisar todas las rutas enriquecidas, se generaron figuras resumen combinando los resultados de las tres bases de datos.
+
+\begin{figure}[ht]
+  \centering
+ \includegraphics[width=0.9\linewidth]{Figura_6.png}
+
+  \caption{Diagrama de flujo del análisis bioinformático de datos RNA-seq en muestras de piel y cerebro de dorada (\textit{S. aurata}).}
+  \label{fig:6}
+\end{figure}
+
+\subsection{Preparación del manuscrito}
+El manuscrito se redactó íntegramente en LaTeX empleando el editor Texmaker v6.0.0 con la distribución MiKTeX de Windows, utilizando el compilador de XeLaTeX y Biber para la bibliografía, garantizando la calidad tipográfica y los formatos recomendados (Anexo 9).
+
+% =====================================================
+%  RESULTADOS 
+% =====================================================
+\section{Resultados}
+\subsection{Preprocesamiento de los datos}
+Para determinar la respuesta transcripcional asociada al posible efecto anti-inflamatorio de SST6 en la dorada, se obtuvieron perfiles de RNA-seq de dos tejidos clave como son la piel (que es la principal diana tras la inflamación estéril inducida en el músculo subyacente), y el cerebro (más concretamente en el telencéfalo, región neuroendocrina rica en neuropéptidos). En primer lugar, los resultados de calidad y profundidad de secuenciación fueron homogéneos en ambos tejidos (Tabla~\ref{tab:tabla_1}). Cada biblioteca aportó entre 26,0 y 29,7 millones de lecturas en piel y entre 24,7 y 28,4 millones de lecturas en cerebro. Durante el descarte de adaptadores y lecturas de baja calidad en el proceso de trimeado, se eliminaron menos del 2\% de las lecturas. La longitud media de pb se mantuvo constante en ambos tejidos, manteniéndose entre 98 y 99 pb. El contenido GC también se mantuvo estable, estando la media en torno al 51\% en piel y en torno al 45\% en cerebro. Además, la tasa de mapeo al genoma de dorada fue elevada en todos los casos, estando en torno al 82,6-88,4\% de las secuencias anotadas en regiones exónicas en la piel y en torno al 81,8-84,3\% en cerebro, sin observarse diferencias notables entre tratamientos. Aproximadamente el 98\% de las lecturas se alinearon en la hebra inversa y el 2\% en la hebra directa, indicando la especificidad de hebra del kit de secuenciación. A partir de estos alineamientos se obtuvieron conteos de expresión para un total de 26.800 genes en piel y 27.652 genes en cerebro de acuerdo con la anotación genómica disponible.
+
+%---------------------------------  TABLA 1  ---------------------------------
+\begin{table}[ht]
+  \centering
+  \caption{Resumen de calidad y profundidad de secuenciación de las bibliotecas de RNA-seq en piel y cerebro de dorada (\textit{n}\,=\,4 por grupo).  
+  M: Millones; pb: pares de bases.}
+  \label{tab:tabla_1}
+
+  {\footnotesize           % tamaño de letra reducido solo aquí
+  \renewcommand{\arraystretch}{1.10}
+  \setlength{\tabcolsep}{3pt}
+
+  \begin{tabularx}{\linewidth}{%
+      l                                     % 1ª columna: Tejido
+      >{\raggedright\arraybackslash}X       % 2ª columna: Métrica (ancho flexible)
+      *{4}{C{2.1cm}} }                      % 4 columnas centradas – ancho fijo
+    \toprule
+    \textbf{Tejido} & \textbf{Métrica de calidad} &
+    \textbf{Control} & \textbf{λ-carragenina} & \textbf{SST6} & \textbf{λ-carragenina + SST6} \\
+    \midrule
+    % ---------- PIEL ----------
+    \multirow[c]{6}{*}{Piel}
+      & Nº de lecturas crudas (M)              & 29,5 ± 2,6 & 29,7 ± 9,1 & 28,0 ± 0,9 & 26,0 ± 0,6 \\
+      & Media longitud lecturas crudas (pb)    & 98,3 ± 0,3 & 99,0 ± 0,0 & 98,8 ± 0,3 & 98,3 ± 0,3 \\
+      & Nº lecturas tras trimeado (M)          & 29,0 ± 2,5 & 29,4 ± 9,3 & 27,8 ± 0,9 & 25,7 ± 0,6 \\
+      & Longitud tras trimeado (pb)            & 98,3 ± 0,3 & 99,0 ± 0,0 & 98,8 ± 0,3 & 98,3 ± 0,3 \\
+      & Contenido GC (\%)                      & 51,5 ± 0,5 & 50,8 ± 0,3 & 51,3 ± 0,3 & 51,3 ± 0,3 \\
+      & Ratio mapeo exónico (\%)               & 88,2 ± 1,7 & 82,6 ± 2,9 & 88,4 ± 1,5 & 87,6 ± 1,0 \\
+    \midrule
+    % ---------- CEREBRO ----------
+    \multirow[c]{6}{*}{Cerebro}
+      & Nº de lecturas crudas (M)              & 28,4 ± 0,9 & 25,9 ± 0,9 & 25,5 ± 0,5 & 24,7 ± 0,4 \\
+      & Media longitud lecturas crudas (pb)    & 99,0 ± 0,0 & 99,0 ± 0,0 & 99,0 ± 0,0 & 99,0 ± 0,0 \\
+      & Nº lecturas tras trimeado (M)          & 28,2 ± 0,8 & 25,7 ± 0,8 & 25,3 ± 0,5 & 24,6 ± 0,4 \\
+      & Longitud tras trimeado (pb)            & 99,0 ± 0,0 & 98,8 ± 0,3 & 98,0 ± 0,0 & 98,7 ± 0,3 \\
+      & Contenido GC (\%)                      & 44,8 ± 0,3 & 44,8 ± 0,5 & 45,0 ± 1,0 & 43,7 ± 0,3 \\
+      & Ratio mapeo exónico (\%)               & 84,0 ± 0,1 & 83,0 ± 0,6 & 81,8 ± 0,8 & 84,3 ± 0,4 \\
+    \bottomrule
+  \end{tabularx}
+  } % fin footnotesize
+\end{table}
+%--------------------------------------------------------------------------- 
+
+\subsection{Análisis exploratorio de los datos}
+Con el fin de evaluar posibles sesgos técnicos propios de las tecnologías de secuenciación masiva que pueden influenciar subsiguientes análisis en RNA-seq, se llevó a cabo un conjunto de análisis exploratorios independientes para piel y cerebro utilizando sus matrices de conteos (Fig.~\ref{fig:7}). Así, los perfiles generados con NOISeq para evaluar sesgos en longitud de gen y en contenido GC, mostraron curvas muy similares entre grupos en ambos casos, sin desviaciones sistemáticas que requirieran normalizaciones adicionales (Fig.~\ref{fig:7}A-~\ref{fig:7}D). Además, la práctica totalidad de los conteos (> 99\%) correspondió a genes codificantes de proteínas, con una fracción residual (< 1\%) etiquetada como “Otros” (Fig.~\ref{fig:7}E,~\ref{fig:7}F). 
+
+\begin{figure}[ht]
+  \centering
+ \includegraphics[width=0.55\linewidth]{Figura_7.png}
+ 
+  \caption{Control de sesgos de conteos obtenidos a partir de muestras de RNA de piel y cerebro de dorada (\textit{S. aurata}) inyectadas con PBS, λ-carragenina, SST6 o λ-carragenina + SST6, y evaluados con NOISeq. Sesgos de contenido GC (A, B), longitud (C, D) y composición de biotipos de RNA (E, F).}
+  \label{fig:7}
+\end{figure}
+
+\newpage
+Por otro lado, el PCA exploratorio realizado en la piel explicó el 30\% y el 18\% de la varianza en las dos primeras componentes principales, PC1 y PC2, respectivamente (Fig.~\ref{fig:8}A). Las réplicas se agruparon relativamente bien según su tratamiento, aunque la muestra 28P del grupo de λ-carragenina + SST6 quedó claramente desplazada de su grupo. De forma similar, estas mismas componentes (PC1 y PC2) capturaron el 36\% y 20\% de la varianza en el cerebro, donde se observó una clara separación de las muestras obtenidas a partir de peces control con respecto de las de los demás grupos (Fig.~\ref{fig:8}B). Además, las muestras 7B y 13B de los grupos de λ-carragenina y SST6, respectivamente, se apartaron del clúster principal. En este sentido, la muestra 28P en la piel presentó un MAD score de –40 (Fig.~\ref{fig:8}C), mientras que las muestras 7B y 13B mostraron valores MAD < –5, (Fig.~\ref{fig:8}D) y por lo tanto fueron consideradas \textit{outliers} y se excluyeron de los análisis posteriores de expresión diferencial para evitar distorsionar la estimación de dispersión en DESeq2.
+
+
+\begin{figure}[ht]
+  \centering
+ \includegraphics[width=0.75\linewidth]{Figura_8.png}
+ 
+  \caption{Análisis exploratorio y detección de muestras atípicas de conteos obtenidos a partir de muestras de RNA de piel y cerebro de dorada (\textit{S. aurata}) inyectadas con PBS, λ-carragenina, SST6 o λ-carragenina + SST6. Análisis de PCA (A, B) y MAD score (C, D)}.
+  \label{fig:8}
+\end{figure}
+
+\subsection{Análisis de expresión diferencial}
+Este análisis se realizó para comprobar la posible influencia de los cuatro tratamientos (Control, λ-carragenina, SST6 y λ-carragenina + SST6) en la expresión génica de piel y cerebro. Después de eliminar las muestras atípicas (28P en piel; 7B y 13B en cerebro), y filtrar genes con bajos conteos, quedaron 17.235 genes en piel y 19.325 genes en cerebro. La matriz depurada y normalizada con DESeq2, que corrige las diferencias de profundidad de secuenciación entre las muestras, se volvió a explorar usando PCA. En este caso las réplicas se agruparon de forma más clara por tratamiento en ambos tejidos, siendo la PC1 la que explicó entre el 25–33\% de la varianza, y sin que apareciesen nuevos valores atípicos (Fig.~\ref{fig:9}A,~\ref{fig:9}B). Para visualizar el patrón conjunto de genes diferencialmente expresados, se construyeron mapas de calor con los DEGs de cada tejido con los DEGs (padj < 0.05, log₂FC ≥ 1) obtenidos al aplicar distintas comparativas usando DESEq2 (Fig.~\ref{fig:9}C,~\ref{fig:9}D). Los dendrogramas reprodujeron el agrupamiento por tratamiento observado en el PCA. En piel, el perfil de λ-carragenina formó un clúster bien diferenciado del resto de grupos, con bloques de sobreexpresión (tonos cálidos) opuestos a los grupos control y SST6, los cuales mostraron un perfil similar. En el caso del grupo de λ-carragenina combinada con SST6, se evidenció un perfil diferente a los grupos de λ-carragenina o SST6, en el que los genes que en alguno de ambos grupos aparecieron sobreexpresados, aquí aparecieron reprimidos y viceversa. En cerebro, se observó un patrón algo diferente al de la piel. Los genes de muestras de peces inyectadas con λ-carragenina siguieron un patrón similar al de los demás tratamientos (SST6 y λ-carragenina + SST6) pero siguieron una dirección completamente opuesta a la del grupo control. Estos resultados refuerzan la señal diferencial a nivel global antes de profundizar en las diferencias individuales de DEGs. 
+
+\begin{figure}[ht]
+  \centering
+ \includegraphics[width=0.75\linewidth]{Figura_9.png}
+ 
+  \caption{Agrupamiento muestral y patrón global de expresión tras la normalización realizada con DESeq2 de los conteos obtenidos a partir de muestras de RNA de piel y cerebro de dorada (\textit{S. aurata}) inyectadas con PBS, λ-carragenina, SST6 o λ-carragenina + SST6. PCA de la matriz normalizada de conteos (A, B) y mapas de calor jerárquicos de los genes diferencialmente expresados (C, D).}
+  \label{fig:9}
+\end{figure}
+
+Los distintos contrastes estadísticos por pares de grupos en piel y cerebro detectaron distinto número de DEGs (Tabla~\ref{tab:tabla_2}). Los \textit{volcano plots} (Fig.\ref{fig:S1}-\ref{fig:S2}) pusieron de manifiesto la magnitud y la dirección de esos cambios. En la piel, el contraste más drástico fue el de λ-carragenina vs SST6, con 2.369 DEGs (1.335 sobreexpresados y 1.034 reprimidos) distribuidos sobre todo en el cuadrante superior derecho, y log₂FC que alcanzaron valores de +10. En el extremo opuesto, el contraste Control vs SST6 solo alteró la expresión de 7 genes, los cuales superaron simultáneamente ambos umbrales. En el cerebro, el contraste control vs λ-carragenina + SST6 fue el que generó el mayor número de DEGs (1.266; 945 sobreexpresados y 321 reprimidos), con log₂FC de hasta ±9. Las comparaciones internas entre tratamientos con carragenina y SST6 (contraste λ-carragenina vs λ-carragenina + SST6) fueron mucho más discretas (≤ 114 DEGs) y en el contraste de SST6 vs λ-carragenina + SST6 no se detectó ningún gen significativo. Globalmente, los tratamientos con λ-carragenina, ya fuera de forma individual o combinada, indujeron alteraciones transcriptómicas de mayor magnitud, especialmente en piel.
+
+%---------------------------------  TABLA 2  ---------------------------------
+\begin{table}[ht]
+  \centering
+  \caption{Número de genes diferencialmente expresados (DEGs, \textit{padj}<0.05) en piel y cerebro de dorada (\textit{S. aurata}) tras los distintos tratamientos.  
+  ↑ = sobreexpresados (log$_2$FC ≥ 1); ↓ = reprimidos (log$_2$FC ≤ –1).}
+  \label{tab:tabla_2}
+
+  {\scriptsize
+  \setlength{\tabcolsep}{0.8pt}
+  \renewcommand{\arraystretch}{1.05}
+
+  % 1. “Tejido” centrado en 1.7 cm • 7 columnas C{2.15 cm}
+  \begin{tabularx}{\linewidth}{C{1.7 cm}*{7}{C{2 cm}}}
+    \toprule
+    \textbf{Tejido} &
+    \shortstack{\textbf{Control vs}\\\textbf{Carragenina}} &
+    \shortstack{\textbf{Control vs}\\\textbf{SST6}} &
+    \shortstack{\textbf{Control vs}\\\textbf{Carragenina}\\\textbf{+ SST6}} &
+    \shortstack{\textbf{Carragenina vs}\\\textbf{SST6}} &
+    \shortstack{\textbf{Carragenina vs}\\\textbf{Carragenina}\\\textbf{+ SST6}} &
+    \shortstack{\textbf{SST6 vs}\\\textbf{Carragenina}\\\textbf{+ SST6}} &
+    \textbf{Total} \\
+    \midrule
+    % ---------------- PIEL ----------------
+    Piel &
+      \shortstack{↑ 795\\↓ 823} &
+      \shortstack{↑ 7\\-} &
+      \shortstack{↑ 156\\↓ 67} &
+      \shortstack{↑ 1.335\\↓ 1.034} &
+      \shortstack{↑ 851\\↓ 445} &
+      \shortstack{↑ 263\\↓ 420} &
+      \shortstack{↑ 3.407\\↓ 2.789} \\[2pt]
+    % --------------- CEREBRO --------------
+    Cerebro &
+      \shortstack{↑ 805\\↓ 263} &
+      \shortstack{↑ 814\\↓ 222} &
+      \shortstack{↑ 945\\↓ 321} &
+      \shortstack{↑ 18\\↓ 49} &
+      \shortstack{↑ 28\\↓ 86} &
+      \shortstack{-\\-} &
+      \shortstack{↑ 2.610\\↓ 941} \\
+    \bottomrule
+  \end{tabularx}
+  } % fin scriptsize
+\end{table}
+%--------------------------------------------------------------------------- 
+
+\newpage
+Los resultados del grado de solapamiento, representados mediante diagramas de Venn, mostraron patrones muy distintos entre tejidos (Fig. ~\ref{fig:10}A, ~\ref{fig:10}B). En la piel, el 90\% de los genes regulados se detectó únicamente en muestras obtenidas de peces inyectados con λ-carragenina (1.566 genes), mientras que el restante 10\% (172 genes) se detectó en las muestras con la combinación de λ-carragenina + SST6 añadió (10\%), dejando en un porcentaje minúsculo (>0.1\%) los genes detectados únicamente en el grupo de peces inyectados con SST6 (3 genes) (Fig.~\ref{fig:10}A). De esta manera, tan solo 7 genes (< 0,5 \%) aparecieron en más de una lista, lo que indica que la respuesta cutánea es fuertemente específica de λ-carragenina. En contraposición, el perfil encontrado en el cerebro fue más integrador, detectándose un núcleo de 576 genes (30\% entre los tres tratamientos), y otras intersecciones bilaterales (49, 139 y 219 genes) que reforzaron la existencia de un repertorio compartido (Fig.~\ref{fig:10}B). Aun así, cada condición mantuvo un conjunto exclusivo apreciable (304, 192 y 332 genes para λ-carragenina, SST6 y la combinación de ambas, respectivamente).
+
+Interesantemente, el último análisis se centró en evaluar la capacidad de SST6 para contrarrestar o revertir la respuesta inducida por λ-carragenina. Para ello, se estudiaron los genes que aquí denominamos como “\textit{switchers}” porque fueron significativos tanto en el contraste control vs λ-carragenina como en control vs λ-carragenina + SST6, pero que tuvieron log₂FC de signo contrario (Tabla~\ref{tab:tabla_3}). En la piel, solo dos genes cumplieron el criterio de inversión y, en ambos casos, pasaron de tener log₂FC negativos en control vs λ-carragenina (mayor expresión en el grupo de λ-carragenina en comparación con el control) a log₂FC positivos en control vs λ-carragenina + SST6 (expresión reprimida al añadir SST6) (Fig.~\ref{fig:10}C). En cerebro, ocho genes mostraron el patrón de log₂FC inverso (de positivo en control vs λ-carragenina a negativo en control vs λ-carragenina + SST6), y con amplitudes de hasta ±5 log₂FC (\textit{meiob} y \textit{atf3}), mostrando por lo tanto un efecto más intenso en comparación con la piel (Fig.~\ref{fig:10}D). Sin embargo, el gen \textit{LOC115594219} invirtió el signo siguiendo el mismo patrón observado en piel, reflejando una respuesta más heterogénea de SST6 en cerebro. De forma general, aunque λ-carragenina produjo un mayor número absoluto de DEGs en la piel como se comentó previamente, estos resultados indican que SST6 ejerce un impacto más profundo en el cerebro.
+
+
+\begin{figure}[ht]
+  \centering
+ \includegraphics[width=0.8\linewidth]{Figura_10.png}
+ 
+  \caption{Comparación integrada de patrones transcriptómicos de muestras de RNA de piel y cerebro de dorada (\textit{S. aurata}) inyectadas con PBS, λ-carragenina, SST6 o λ-carragenina + SST6. Los diagramas de Venn muestran el solapamiento de DEGs entre tratamientos (A, B), mientras que los boxplot destacan los genes \textit{switchers} cuya dirección de cambio es revertida por SST6 frente a λ-carragenina (C, D).}
+  \label{fig:10}
+\end{figure}
+
+
+%---------------------------------  TABLA 3  ---------------------------------
+\begin{table}[ht]
+  \centering
+  \caption{Genes revertidos por SST6 (\textit{switchers}) en muestras de piel y cerebro de dorada. Los \textit{switchers} fueron definidos únicamente con los contrastes control vs λ-carragenina y control vs λ-carragenina + SST6. Las columnas restantes se incluyen como referencia. Valores en log₂FC; positivo = mayor expresión en la condición situada a la izquierda del “vs”; negativos = mayor expresión en la condición a la derecha del “vs”.}
+  \label{tab:tabla_3}
+
+  {\small
+  \setlength{\tabcolsep}{1pt}
+  \renewcommand{\arraystretch}{1.05}
+
+  \begin{tabularx}{\linewidth}{%
+      C{1.7cm}      % Tejido
+      C{2.4cm}      % Gen
+      *{5}{C{2.15cm}}} % 5 contrastes
+    \toprule
+    \textbf{Tejido} & \textbf{Gen} &
+    \shortstack{\textbf{Control vs}\\\textbf{λ-carragenina}} &
+    \shortstack{\textbf{Control vs}\\\textbf{SST6}} &
+    \shortstack{\textbf{Control vs}\\\textbf{λ-carragenina +}\\\textbf{SST6}} &
+    \shortstack{\textbf{λ-carragenina vs}\\\textbf{SST6}} &
+    \shortstack{\textbf{λ-carragenina vs}\\\textbf{λ-carragenina +}\\\textbf{SST6}} \\ 
+    \midrule
+    %------------- PIEL -------------
+    \multirow[c]{2}{*}{Piel}
+      & \textit{LOC115569329} & –1.32 &  0.31 &  1.71 &  1.63 &  3.03 \\
+      & \textit{LOC115574283} & –1.18 &  1.05 &  2.28 &  2.22 &  3.45 \\[2pt]
+    %----------- CEREBRO ------------
+    \multirow[c]{9}{*}{Cerebro}
+      & \textit{atf3}          &  2.11 & –1.09 & –1.59 & –3.20 & –3.70 \\
+      & \textit{LOC115570192}  &  1.11 & –1.61 & –1.54 & –2.73 & –2.65 \\
+      & \textit{LOC115573017}  &  1.54 & –0.90 & –1.22 & –2.43 & –2.76 \\
+      & \textit{LOC115583816}  &  1.76 & –1.68 & –1.92 & –3.43 & –3.67 \\
+      & \textit{LOC115588188}  &  0.86 & –1.25 & –1.22 & –2.12 & –2.08 \\
+      & \textit{LOC115594219}  & –0.79 &  0.40 &  0.90 &  1.19 &  1.69 \\
+      & \textit{LOC115596587}  &  0.70 & –0.62 & –0.96 & –1.31 & –1.66 \\
+      & \textit{meiob}         &  3.51 & –1.96 & –2.52 & –5.47 & –6.03 \\
+      & \textit{nfe2l2}        &  0.62 & –0.03 & –0.45 & –0.65 & –1.07 \\
+    \bottomrule
+  \end{tabularx}
+  } % fin scriptsize
+\end{table}
+%--------------------------------------------------------------------------- 
+
+
+
+
+\subsection{Análisis de enriquecimiento funcional}
+El análisis de enriquecimiento funcional de los DEG utilizando los ortólogos del pez cebra con un enfoque de GSEA, reveló diferencias clave en las rutas entre las condiciones estudiadas (Tabla~\ref{tab:tabla_4}). 
+
+%---------------------------------  TABLA 4  ---------------------------------
+\begin{table}[ht]
+  \centering
+  \caption{Número de rutas significativamente activadas (↑ NES > 0) o reprimidas (↓ NES < 0) en piel y cerebro de dorada (\textit{Sparus aurata}), según análisis GSEA sobre ortólogos de pez cebra en los distintos contrastes experimentales y según las bases de datos Gene Ontology (GO: Biological Process), KEGG y Reactome.}
+  \label{tab:tabla_4}
+
+  {\fontsize{8}{11}\selectfont
+  \setlength{\tabcolsep}{1pt}
+  \renewcommand{\arraystretch}{1.05}
+
+  % Flechas (útiles fuera de esta tabla ⇒ ponlas en el preámbulo)
+  \newcommand{\up}{\raisebox{0.45ex}{\scriptsize$\uparrow$}}
+  \newcommand{\down}{\raisebox{-0.3ex}{\scriptsize$\downarrow$}}
+
+  \begin{tabularx}{\linewidth}{%
+      C{1.7cm}  % Tejido
+      C{1.7cm}  % BD
+      *{6}{C{2.0cm}}}
+    \toprule
+    \textbf{Tejido} & \textbf{Base de datos} &
+    \shortstack{\textbf{Control vs}\\\textbf{λ-carragenina}} &
+    \shortstack{\textbf{Control vs}\\\textbf{SST6}} &
+    \shortstack{\textbf{Control vs}\\\textbf{λ-carragenina}\\\textbf{+ SST6}} &
+    \shortstack{\textbf{λ-carragenina vs}\\\textbf{SST6}} &
+    \shortstack{\textbf{λ-carragenina vs}\\\textbf{λ-carragenina +}\\\textbf{SST6}} &
+    \shortstack{\textbf{SST6 vs}\\\textbf{λ-carragenina +}\\\textbf{SST6}} \\ 
+    \midrule
+    %---------------- PIEL ----------------
+    \multirow[c]{3}{*}{Piel}
+      & GO BP    & \shortstack{\up 68\\\down 34}
+                 & \shortstack{\up 60\\\down 36}
+                 & \shortstack{\up 100\\\down 15}
+                 & \shortstack{\up 36\\\down 29}
+                 & \shortstack{\up 44\\\down 11}
+                 & \shortstack{\up 100\\\down 31} \\[2pt]
+      & KEGG     & \shortstack{\up 2\\\down 1}
+                 & \shortstack{\up 1\\-}
+                 & \shortstack{\up 10\\\down 4}
+                 & \shortstack{\up 2\\-}
+                 & \shortstack{\up 9\\\down 5}
+                 & \shortstack{\up 6\\\down 7} \\[2pt]
+      & Reactome & \shortstack{\up 30\\\down 2}
+                 & \shortstack{\up 9\\-}
+                 & \shortstack{\up 18\\\down 5}
+                 & \shortstack{\up 34\\\down 13}
+                 & \shortstack{\up 2\\\down 1}
+                 & \shortstack{\up 13\\\down 4} \\[4pt]
+    %-------------- CEREBRO ---------------
+    \multirow[c]{3}{*}{Cerebro}
+      & GO BP    & \shortstack{\up 33\\\down 17}
+                 & \shortstack{\up 28\\\down 5}
+                 & \shortstack{\up 40\\\down 16}
+                 & \shortstack{\up 33\\\down 3}
+                 & \shortstack{\up 64\\\down 55}
+                 & \shortstack{\up 4\\\down 8} \\[2pt]
+      & KEGG     & \shortstack{-\\\down 1}
+                 & -
+                 & \shortstack{-\\\down 2}
+                 & \shortstack{-\\\down 1}
+                 & \shortstack{\up 2\\\down 8}
+                 & - \\[2pt]
+      & Reactome & \shortstack{\up 14\\\down 7}
+                 & \shortstack{\up 6\\\down 6}
+                 & \shortstack{\up 10\\\down 7}
+                 & -
+                 & \shortstack{-\\\down 8}
+                 & \shortstack{\up 4\\\down 4} \\
+    \bottomrule
+  \end{tabularx}
+  }% fin scriptsize
+\end{table}
+%--------------------------------------------------------------------------- 
+
+Los diagramas de burbujas de la piel mostraron la activación de rutas de metabolismo general, regulación de PTEN, procesos de queratinización y apoptosis, la activación de la regulación positiva de células T y la ruta de degradación del proteasoma en el contraste de control vs λ-carragenina (Fig.~\ref{fig:11}A). Sin embargo, entre las categorías reprimidas destacaron la respuesta inmunitaria innata, la interacción de citoquinas con sus receptores y la neurogénesis. Por otro lado, en el contraste de control vs SST6 sobre todo aumentó la expresión de genes de rutas de respuesta al estrés, la desgranulación de neutrófilos y el metabolismo lipídico, inhibiendo en contraposición genes de las rutas de la regulación del proceso biosintético, del procesamiento y presentación de antígenos y de los ritmos circadianos (Fig.~\ref{fig:11}B). Sin embargo, la combinación de ambos (control vs λ-carragenina + SST6) mantuvo la activación de la vía de regulación de PTEN, la activación de linfocitos y el sistema inmunitario adaptativo, así como el sistema neural (Fig.~\ref{fig:11}C). También se mantuvieron activados procesos de renovación como la apoptosis, junto con el citoesqueleto de células musculares y la señalización de PPAR. Sin embargo, se produjo una represión de las rutas relacionadas con la respuesta al estrés, el desarrollo de la epidermis y la vía de señalización de Wnt. En la Figura~\ref{fig:12} se puede observar en más detalle cómo la λ-carragenina (en la comparativa de control vs λ-carragenina) indujo una fuerte represión de los receptores de citoquinas y quimioquinas en la piel (Fig.~\ref{fig:12}A), mientras que la combinación de control frente a λ-carragenina + SST6 produjo una gran activación de moléculas implicadas en la organización de los sarcómeros como los filamentos delgados de actina y miosina, así como una débil represión de moléculas involucradas en unión a la membrana (Fig.~\ref{fig:12}B).
+
+\begin{figure}[p]                 % «p» = float-page
+  \centering
+  \includegraphics[width=0.7\linewidth]{Figura_11.png}
+  \caption{Diagramas de burbujas (GSEA) de los diez términos más informativos observados en la piel de dorada (\textit{S.\ aurata}) combinando los resultados de las tres bases de datos estudiadas (GO, KEGG y Reactome). Las figuras muestran los contrastes de tratamientos frente al grupo control: (A) Control vs λ-carragenina, (B) Control vs SST6, (C) Control vs λ-carragenina + SST6.}
+
+  \label{fig:11}
+\end{figure}
+\clearpage                          % drena floats y empieza página nueva
+
+
+\begin{figure}[htbp]
+  \centering
+ \includegraphics[width=0.8\linewidth]{Figura_12.png}
+ 
+  \caption{Detalle de rutas KEGG en la piel de la dorada (\textit{S.\ aurata}) donde cada rectángulo representa un gen y se colorean por su nivel de log₂FC (verde indica un log₂FC negativo y rojo positivo) obtenido en este experimento. (A) Represión de receptores de citoquinas/quimioquinas observado en el contraste de control vs λ-carragenina, y B) activación de genes del citoesqueleto en células musculares en el contraste de control vs λ-carragenina + SST6.}
+  \label{fig:12}
+\end{figure}
+
+En el cerebro, el contraste de control frente a λ-carragenina activó un número considerable de genes de la vía TAK1 dependiente de la activación de IKK/NF-κB y la señalización célula-célula, así como la liberación de neurotransmisores y mecanismos apoptóticos como la fase de ejecución apoptótica o la condensación de los cromosomas (Fig.~\ref{fig:13}A). Sin embargo, se produjo una represión de las rutas de desarrollo neuronal, biosíntesis de ácidos biliares, procesos de sumoilación y regulación de PTEN. En el caso de control vs SST6, este neuropéptido indujo la activación de rutas relacionadas con la regulación de síntesis de ARN, el desarrollo de órganos sensoriales y cerebro y el transporte y liberación de neurotransmisores (Fig.~\ref{fig:13}B). En contraposición, produjo la represión de la vía de regulación de PTEN y la ruta de procesamiento de antígenos. Finalmente, la combinación de control vs λ-carragenina + SST6 produjo una clara activación de la ruta de NF-κB (vía Tak1/IKK) y la señalización de IL1, junto a la respuesta a factores de crecimiento (Fig.~\ref{fig:13}C). En contraste, la vía de regulación de PTEN, la muerte celular, y la sumoilación, así como la biosíntesis de ácidos biliares permanecieron reprimidas. En las rutas detalladas y proporcionadas por KEGG, se pudo observar efectivamente una débil represión de hasta 10 genes implicados en la biosíntesis de ácidos biliares primarios en el cerebro de peces inyectados con λ-carragenina, en el contraste de control vs λ-carragenina (Fig.~\ref{fig:14}A), mientras que el número de genes se redujo a 3 en el contraste de control frente a λ-carragenina + SST6 (Fig.~\ref{fig:14}B).
+
+\begin{figure}[p]                 % «p» = float-page
+  \centering
+  \includegraphics[width=0.7\linewidth]{Figura_13.png}
+  \caption{Diagramas de burbujas (GSEA) de los diez términos más informativos observados en el cerebro de dorada (\textit{S. aurata}) combinando los resultados de las tres bases de datos estudiadas (GO, KEGG y Reactome). Las figuras muestran los contrastes de tratamientos frente al grupo control: (A) Control vs λ-carragenina,  (B) Control vs SST6, (C) Control vs λ-carragenina + SST6}
+
+  \label{fig:13}
+\end{figure}
+\clearpage                          % drena floats y empieza página nueva
+
+
+\begin{figure}[htbp]
+  \centering
+ \includegraphics[width=1\linewidth]{Figura_14.png}
+ 
+  \caption{Detalle de rutas KEGG en el cerebro de la dorada (\textit{S.\ aurata}), donde cada rectángulo representa un gen y se colorean por su nivel de log₂FC (verde indica un log₂FC negativo y rojo positivo) obtenido en este experimento. Biosíntesis de ácidos biliares primarios en los contrastes (A) control vs λ-carragenina, y (B) control vs λ-carragenina + SST6.}
+  \label{fig:14}
+\end{figure}
+
+
+% =====================================================
+%  DISCUSIÓN 
+% =====================================================
+\section{Discusión}
+La SST6 de dorada es un neuropéptido recientemente anotado y perteneciente a la familia de SST/CST que ha despertado un gran interés debido a su posible relación con la CST de mamíferos. En el presente Trabajo Fin de Máster, se evaluó mediante un análisis de RNA-seq el perfil transcriptómico de muestras de piel y cerebro de dorada a las que se le sometió a una inflamación experimental estéril para dilucidar el potencial efecto anti-inflamatorio de la SST6. El modelo inflamatorio habitual de λ-carragenina en la dorada, suele utilizar una concentración reducida de λ-carragenina (0.5 mg mL\textsuperscript{-1}) para producir una inflamación aguda y muy localizada que parece resolverse en cuestión de 24 h \parencite{CamposSanchez2021a,CamposSanchez2021b}. Por este motivo, y para poder desafiar la capacidad moduladora de SST6, usamos un modelo de inflamación hiperaguda aumentando la concentración a 10 mg mL\textsuperscript{-1} \parencite{CamposSanchez2025} y prolongamos la observación hasta el tercer día después de la inyección de acuerdo a los trabajos realizados en mamíferos con CST \parencite{DelgadoMaroto2017,GonzalezRey2007}. La concentración de SST6 fue testada y establecida tras un ensayo experimental previo (datos no publicados) y de acuerdo con la información existente en mamíferos. Finalmente, y antes de comenzar con el grueso de la discusión, es importante considerar que los resultados obtenidos en el análisis de enriquecimiento están basados en rutas pertenecientes al pez cebra debido a que es el organismo modelo más cercano a la dorada y que, por lo tanto, algunas rutas podrían no coincidir exactamente con las rutas en realidad modificadas en la dorada. Este estudio también abre la puerta a nuevos ensayos que puedan corroborar los presentes resultados.
+
+\clearpage
+De esta manera, los resultados obtenidos en el ensayo de RNA-seq mostraron diferentes patrones de expresión en piel y cerebro, dependiendo de los estímulos empleados en cada momento. En la piel, λ-carragenina tuvo un efecto claramente proinflamatorio y pro-apoptótico que disparó el remodelado epigenético y la proteostasis (homeostasis de proteínas). De hecho, los resultados obtenidos con los \textit{volcano plots} y los diagramas de Venn evidenciaron de forma característica la gran magnitud que tuvieron los efectos de λ-carragenina en piel en comparación con el cerebro. En este sentido, el modelo típico de λ-carragenina en la dorada está caracterizado por un rápido reclutamiento de granulocitos acidófilos desde el riñón cefálico hasta la zona de inyección, donde inician una fuerte respuesta innata con la liberación de moléculas preformadas como peroxidasa, lisozima o ROS para acabar con el estímulo inicial \parencite{CamposSanchez2021c}. Sin embargo, en el presente estudio, la respuesta inmunitaria innata pareció estar reprimida en la piel de peces inyectados con λ-carragenina a los tres días de la inyección, en contraposición con una característica activación de linfocitos T. En este sentido, los resultados apuntan a que la respuesta innata podría haber sido insuficiente como para eliminar la elevada concentración de λ-carragenina inyectada en el músculo y, por lo tanto, se habría dado paso a la activación posterior de la respuesta inmunitaria adaptativa. Además, ensayos previos sugieren que λ-carragenina podría ser presentada mediante células profesionales presentadoras de antígeno (APC) como macrófagos y células dendríticas a los linfocitos T, activándolos. Estos resultados están de acuerdo con ensayos previos de cáncer realizados en mamíferos donde λ-carragenina parece ser capaz, no solo de activar, sino también de polarizar los linfocitos T hacia un perfil T\textsubscript{h1} con aumento marcado de IFN-γ y descenso de IL-4, o hacia un perfil T\textsubscript{h17} para promover la función anti-tumoral \parencite{Tsuji2003,Luo2015}. Por otro lado, λ-carragenina también ha sido ampliamente utilizada en mamíferos como modelo de dolor y sensibilización. En este contexto, el nexo del sistema inmunitario con el sistema nervioso resulta fundamental para entender sus mecanismos de acción en la dorada, ya que, en nuestro estudio, λ-carragenina provocó una represión significativa de rutas asociadas a la neurogénesis en la piel, alineándose con la fase tardía de la cascada nociceptiva descrita en mamíferos. De esta manera, la producción de citoquinas proinflamatorias como IL-1β, TNF-α, IL-6 y ROS no solo podrían intensificar la sensibilización periférica, sino que también podrían suprimir los genes responsables del crecimiento y remodelado de fibras nerviosas. Además, se observó un aumento en la ruta de regulación de PTEN, cuyo producto actúa como supresor de tumores inhibiendo señales de proliferación y supervivencia celular, y jugando un papel crucial en la regulación de la inflamación \parencite{Li2021}. En conjunto, estos cambios reflejan un desequilibrio neuroinmune en el que la prioridad metabólica recae en contener y mitigar la inflamación y reparar el daño tisular, dejando en segundo plano la remodelación de las terminaciones nociceptivas. De forma integrada, la λ-carragenina indujo en el cerebro la activación de la ruta TAK1–IKK–NF-κB, una ruta central de inflamación prolongada en mamíferos, que promueve la síntesis sostenida de citoquinas proinflamatorias, como las mencionadas previamente y favorece la activación de la microglía, contribuyendo a la sensibilización neuronal y la cronificación del dolor \parencite{Sun2022}. Paralelamente, se observó una sobrerrepresentación de rutas relacionadas con la liberación de neurotransmisores, lo que encaja con los fenómenos de hiperalgesia y las alteraciones en la percepción sensorial que acompañan a la inflamación crónica. Por otro lado, la represión tanto de la ruta de regulación de PTEN como de los genes implicados en el desarrollo neuronal en el telencéfalo de dorada apuntan a un estado en el que las señales inflamatorias suprimen la neurogénesis en lugar de promoverla. En este contexto, la disminución de PTEN, que en condiciones normales restringe la proliferación y la supervivencia celular, podría interpretarse como un intento de liberar a las células progenitoras del freno proliferativo. Sin embargo, los elevados niveles de citocinas proinflamatorias y de ROS podrían mantener bloqueados los programas de crecimiento y remodelado neuronal, desviando a las células precursoras hacia un destino glial que ayude a contener la inflamación. En conjunto, estos hallazgos podrían indicar que la inflamación inducida por λ-carragenina en el cerebro no solo desencadena una respuesta proinflamatoria clara, sino que también podría promover procesos de gliogénesis reactiva como estrategia compensatoria para limitar el daño neuronal y, potencialmente, modular la percepción del dolor a largo plazo. No obstante, sería necesario estudiar estos mecanismos de manera más profunda en el cerebro para corroborar esta hipótesis.
+
+Tras describir detalladamente los efectos proinflamatorios y de sensibilización que λ-carragenina es capaz de inducir en la piel y el cerebro de la dorada, a continuación, se evaluaron los efectos de SST6 en cada tejido para conocer sus posibles funciones moduladoras basales. Así, la administración de SST6 reveló un perfil transcriptómico consistente con un papel integrador en la regulación equilibrada del sistema neuroinmune. En la piel, este neuropéptido activó procesos relacionados con la respuesta inmediata al estrés, así como la desgranulación de neutrófilos y la inmunidad innata. Estos resultados están de acuerdo con los encontrados en mamíferos, en los cuales, CST es producida activamente por células del sistema inmune, como monocitos, macrófagos, células dendríticas o incluso linfocitos, a diferencia de SST \parencite{Dalm2003}. Estos mecanismos sugieren que SST6 podría preparar al tejido cutáneo para enfrentar cualquier desafío mediante la producción temprana de mediadores inmunitarios, esenciales para controlar la inflamación y facilitar una reparación tisular eficiente. Además, al inhibir vías relacionadas con la presentación antigénica y la regulación biosintética, SST6 podría evitar una activación exagerada de la respuesta inmunitaria cuando no existe un desafío real, contribuyendo a mantener un equilibrio inmunológico. Este efecto anticipatorio parece reforzado por la activación simultánea de vías relacionadas con apoptosis y queratinización. Sin embargo, esta actividad proapoptótica contrasta con los estudios en mamíferos, donde la CST generalmente ejerce un papel anti-apoptótico, siempre en contextos patológicos (por ejemplo, aneurisma, aterosclerosis u osteonecrosis), en los que los niveles de daño celular y ROS son muy elevados, y CST es capaz de atenuar el exceso de estrés oxidativo, restaurando un balance celular \parencite{Chen2022b,DelgadoMaroto2017b,Gao2024}. En nuestro ensayo, en cambio, la inyección de SST6 en peces sanos (sin λ-carragenina previa) actúa sobre un contexto cercano a la homeostasis, activando mecanismos fisiológicos de renovación cutánea en lugar de contrarrestar un daño severo. Por tanto, en la piel de dorada, SST6 estaría facilitando el recambio celular epidérmico al promover la eliminación programada de células senescentes o dañadas, junto con la proliferación y diferenciación de nuevas células epidérmicas capaces de reforzar la integridad de la barrera protectora cutánea. Además, SST6 también moduló negativamente vías relacionadas con el ritmo circadiano, un efecto que coincide con los mecanismos descritos para CST en mamíferos, donde se ha demostrado que la CST endógena induce el sueño al inhibir los efectos de la acetilcolina, neurotransmisor implicado en los ciclos de sueño/vigilia \parencite{Spier2000}. Por tanto, la capacidad de SST6 para suprimir genes vinculados al ritmo circadiano en la piel de dorada refleja una función conservada en la regulación de los ciclos biológicos, complementando sus efectos sobre la inflamación y la renovación tisular. Por otro lado, en el cerebro, SST6 mostró un patrón claramente orientado hacia la neuroprotección y mantenimiento de la función neuronal óptima. Este neuropéptido activó rutas asociadas al desarrollo cerebral y sensorial, el transporte y liberación de neurotransmisores y la señalización intracelular mediada por Wnt, todas ellas claves para mantener una comunicación eficiente entre neuronas y reforzar la plasticidad neuronal. Este conjunto de procesos activados parece respaldar una función estabilizadora del neuropéptido, protegiendo al tejido nervioso frente a posibles alteraciones externas. Además, la inhibición observada en rutas relacionadas con la degradación de proteínas (ubiquitinación-proteasoma) y la regulación negativa de PTEN sugiere un efecto anti-apoptótico y antiestrés, preservando la viabilidad celular y reforzando así la estabilidad neuronal ante desafíos sistémicos o locales. En definitiva, los efectos de SST6 en ambos tejidos podrían interpretarse como parte de una estrategia coordinada y adaptativa del organismo, en la cual el neuropéptido funciona como modulador clave anticipando desafíos inflamatorios periféricos, facilitando su resolución y, simultáneamente, preservando la integridad y funcionalidad neuronal frente al estrés asociado, consolidando una respuesta neuroinmune global, eficiente y resolutiva.
+
+Habiendo caracterizado el perfil de SST6 en condiciones basales de piel y cerebro, el siguiente paso consistió en analizar cómo este neuropéptido es capaz de modular la respuesta inflamatoria inducida por λ-carragenina tanto a nivel periférico como central. En la piel, la coadministración de λ-carragenina con SST6 mantuvo la activación de rutas asociadas a la respuesta inmunitaria adaptativa y a la regulación de PTEN (ahora en concordancia también con la represión observada de la señalización Wnt \parencite{Ma2016}), cambios ya asociados a la administración de λ-carragenina, pero introdujo modificaciones clave atribuibles a SST6. En primer lugar, se activó de forma notable la ruta de señalización del PPAR, conocida por su papel en la resolución inflamatoria mediante el control del metabolismo lipídico y energético, lo que sugiere que la SST6 podría potenciar mecanismos metabólicos de resolución lipídica y reparación, entre los que se incluirían la activación observada de rutas de reorganización del citoesqueleto en células musculares o la queratinización. Estos resultados concuerdan con los estudios realizados en modelos roedores de aterosclerosis donde CST es capaz de activar PPARγ vía receptores de grelina, favoreciendo la polarización de macrófagos hacia un fenotipo M2 con capacidad anti-inflamatoria e implicada en procesos de reparación tisular \parencite{DelgadoMaroto2017b}. En segundo lugar, la respuesta al estrés epidérmico se redujo notablemente al añadir el neuropéptido junto con λ-carragenina, indicando que SST6 podría atenuar la hiperactivación celular en etapas avanzadas de inflamación. Además, mientras que la administración individual de λ-carragenina había suprimido las rutas relacionadas con la neurogénesis (posiblemente asociadas al  crecimiento y remodelado de fibras nerviosas periféricas), la coadministración con SST6 restableció la representación de rutas relacionadas con el sistema neural, lo que sugiere que el neuropéptido favorece la comunicación nerviosa durante la resolución inflamatoria. En conjunto, este patrón respalda la capacidad de SST6 para guiar la inflamación cutánea hacia fases de reparación y homeostasis, evitando el daño excesivo que, de otro modo, prolongaría la lesión. De hecho, la existencia de genes \textit{switchers} específicos en piel que pasaron de una expresión aumentada en presencia de λ-carragenina a una disminuida al añadir SST6, refuerzan esta hipótesis, confirmando una acción directa y específica del neuropéptido sobre rutas previamente desencadenadas por λ-carragenina. A nivel cerebral, SST6 mostró efectos claramente neuroprotectores en el contexto inflamatorio. La activación sostenida de la ruta TAK1 dependiente de IKK y NF-κB en presencia de λ-carragenina fue acompañada por un efecto regulador de SST6 que moderó la intensidad de la respuesta inflamatoria, reflejado en la reducción de procesos de muerte celular programada y sumoilación de proteínas, que típicamente marcan el estrés y daño neuronal prolongado. Es especialmente relevante la represión sostenida de la vía de regulación de PTEN en el cerebro tras la adición de SST6, un mecanismo clave ya comentado en el control del crecimiento celular, supervivencia neuronal y plasticidad sináptica. Esto sugiere que SST6 podría estar favoreciendo vías neurotróficas y neurogénicas, reduciendo así el impacto negativo de la inflamación prolongada inducida por λ-carragenina. Además, genes claves identificados como \textit{switchers} en cerebro, tales como \textit{atf3} (\textit{Activating transcription factor 3}), \textit{meiob} (\textit{Meiosis specific with OB-fold}) y \textit{nfe2l2} (\textit{Nuclear factor erythroid 2-related factor 2}), respaldan aún más la noción de que SST6 ejerce una función directa en la modulación de vías críticas relacionadas con la neuroprotección y la respuesta antioxidante. \textit{atf3}, por ejemplo, es conocido por su rol adaptativo ante el estrés celular, mientras que \textit{nfe2l2} es fundamental en la regulación de respuestas antioxidantes frente a daños oxidativos generados por inflamación crónica \parencite{Brown2008}.
+
+%=====================================================
+% CONCLUSIONES
+ %=====================================================
+\section{Conclusiones}
+Los resultados obtenidos en el presente estudio evidencian que la SST6 podría actuar como un modulador eficaz del eje neuroinmune, siendo capaz de atenuar la inflamación cutánea inducida por λ-carragenina al reactivar rutas de resolución lipídica y favorecer la reparación tisular, al tiempo que restablece la expresión de genes relacionados con la neurogénesis local. En el cerebro, la SST6 fue capaz de moderar los mecanismos de muerte celular y promover rutas neurotróficas y antioxidantes. Además, la inversión en la expresión de genes \textit{switchers} confirmó que la SST6 era capaz de revertir la respuesta proinflamatoria provocada por λ-carragenina, orientando el proceso hacia la homeostasis. Estos hallazgos posicionan a la SST6 como un candidato prometedor para el desarrollo de nuevas estrategias preventivas o terapéuticas en acuicultura, orientadas a mejorar el bienestar y la resiliencia de los peces de cultivo frente a procesos inflamatorios.
+
+% =====================================================
+% APÉNDICE ODS
+% =====================================================
+
+\section{Relación del TFM con los Objetivos de Desarrollo Sostenible }
+La relevancia de este Trabajo Fin de Máster con los Objetivos de Desarrollo Sostenible (ODS) de la Agenda 2030 se articula en diferentes niveles, comenzando por su aportación a la seguridad alimentaria y la sostenibilidad de la producción acuícola. Al caracterizar y validar un modelo experimental propio de inflamación en dorada, así como al demostrar que SST6 puede modular la respuesta inflamatoria sin recurrir a fármacos convencionales, se contribuye directamente al  \textbf{ODS 2 (Hambre Cero)} al incrementar la productividad y la sostenibilidad de la producción de alimentos de origen acuático. La posibilidad de atenuar procesos inflamatorios y reducir la mortalidad en peces de cultivo apoya el objetivo de generar alimentos más sanos y accesibles, minimizando las pérdidas productivas y optimizando el uso de recursos en las piscifactorías.
+
+Asimismo, al mejorar el bienestar de los peces mediante la regulación neuroinmune, evitando inflamaciones crónicas que comprometen su salud y supervivencia, se promueve el  \textbf{ODS 3 (Salud y bienestar)} de los animales de producción. Una mejor salud inmunológica de los peces se traduce en una menor dependencia de antibióticos o anti-inflamatorios sintéticos, reduciendo la aparición de resistencias y el riesgo de residuos en el medio acuático. Además, la capacidad de SST6 para ejercer un efecto neuroprotector al moderar la activación de vías inflamatorias centrales favorece un estado de menor estrés y mejor función del sistema nervioso, lo que a su vez repercute en un rendimiento productivo más estable y en menos riesgos sanitarios para las poblaciones de peces. 
+
+Por otro lado, en lo que respecta al cuidado de los recursos hídricos, es bien sabido que la intensificación de la acuicultura puede incrementar la carga orgánica y los niveles de nutrientes en los sistemas de cultivo, poniendo en riesgo la calidad del agua y la salud de los ecosistemas. Al reducir la mortalidad y mantener a los peces en condiciones fisiológicas óptimas, este estudio contribuye a disminuir la generación de desechos orgánicos y a mitigar el impacto ambiental asociado a los efluentes de las piscifactorías, alineándose con la meta del  \textbf{ODS 6 (Agua limpia y saneamiento)}.
+
+Además, la propuesta de estrategias basadas en moduladores endógenos como SST6 favorece un modelo como el del  \textbf{ODS 12 (Producción y consumo responsables)}, en el que se minimiza la utilización de compuestos externos y se reduce la generación de residuos ya comentada. Al mismo tiempo, la difusión de estos avances en la comunidad científica y en el sector productivo impulsa la sensibilización sobre la importancia del bienestar animal y la gestión sostenible en acuicultura, cumpliendo con el propósito de informar y capacitar para prácticas más responsables.
+
+Por último, el desarrollo de este TFM ha impulsado la colaboración interdisciplinar entre grupos de inmunobiología de la UMU, y la plataforma de bioinformática del IMIB, fortaleciendo alianzas científicas que favorecen el intercambio de conocimientos y tecnologías fomentando el  \textbf{ODS 17 (Alianzas para lograr los objetivos)}. Esta cooperación se inscribe en la voluntad de asociarse para alcanzar los objetivos de sostenibilidad, promoviendo redes de trabajo que permitan trasladar los hallazgos a otros centros de investigación y escalarlos a proyectos internacionales. De este modo, este estudio no solo mejora el bienestar y la resiliencia de los peces de cultivo, sino que también refuerza el compromiso de la investigación académica con los desafíos globales en materia de desarrollo sostenible.
+\clearpage  
+
+% =====================================================
+%  REFERENCIAS % =====================================================
+\section{Referencias}
+\printbibliography[heading=none]
+
+\clearpage
+\appendix
+
+\begin{center}
+\section*{Material Suplementario}
+\addcontentsline{toc}{section}{Material Suplementario}
+\end{center}
+
+% Reiniciamos el contador de figuras y definimos la numeración con S
+\setcounter{figure}{0}
+\renewcommand{\thefigure}{S\arabic{figure}}
+
+\begin{figure}[ht]
+  \centering
+  \includegraphics[width=0.8\linewidth]{S1.png}%
+  \caption[Volcano plots de DEGs en piel]{%
+    Diagramas de volcanes que ilustran la distribución y significancia estadística de los genes diferencialmente expresados (DEGs) en piel de dorada (\textit{Sparus aurata}) para los contrastes  (A) Control vs λ-carragenina, (B) Control vs SST6, (C) Control vs λ-carragenina + SST6, (D) λ-carragenina vs SST6, (E) λ-carragenina vs λ-carragenina + SST6 y (F) SST6 vs λ-carragenina + SST6 . En cada panel, el eje horizontal representa el cambio en la expresión génica medido como \textit{log₂ fold change} (log₂FC), donde valores positivos (hacia la derecha) indican sobreexpresión relativa en el primer grupo del par (“vs”) y valores negativos (hacia la izquierda) indican sobreexpresión en el segundo grupo. Las líneas verticales discontinuas marcan los umbrales de log₂FC = ±1, y la línea horizontal discontinua indica el nivel de significancia padj = 0.05 (–log₁₀(padj)). De este modo, el cuadrante superior derecho (rojo) agrupa los genes significativamente sobreexpresados (↑), mientras que el superior izquierdo (también en rojo) contiene los genes significativamente reprimidos (↓) bajo cada tratamiento.  Código de colores: verde = NS; azul = padj<0.05 solo; rojo = padj<0.05 y |log$_2$FC|≥1; líneas discontinuas: log$_2$FC=±1 y padj=0.05.
+  }
+  \label{fig:S1}
+\end{figure}
+
+
+\begin{figure}[ht]
+  \centering
+  \includegraphics[width=0.8\linewidth]{S2.png}%
+  \caption[Volcano plots de DEGs en cerebro]{%
+    Diagramas de volcanes que ilustran la distribución y significancia estadística de los genes diferencialmente expresados (DEGs) en  cerebro de dorada (\textit{Sparus aurata}) para los contrastes (A) Control vs λ-carragenina, (B) Control vs SST6, (C) Control vs λ-carragenina + SST6, (D) λ-carragenina vs SST6, (E) λ-carragenina vs λ-carragenina + SST6 y (F) SST6 vs λ-carragenina + SST6 . En cada panel, el eje horizontal representa el cambio en la expresión génica medido como \textit{log₂ fold change} (log₂FC), donde valores positivos (hacia la derecha) indican sobreexpresión relativa en el primer grupo del par (“vs”) y valores negativos (hacia la izquierda) indican sobreexpresión en el segundo grupo. Las líneas verticales discontinuas marcan los umbrales de log₂FC = ±1, y la línea horizontal discontinua indica el nivel de significancia padj = 0.05 (–log₁₀(padj)). De este modo, el cuadrante superior derecho (rojo) agrupa los genes significativamente sobreexpresados (↑), mientras que el superior izquierdo (también en rojo) contiene los genes significativamente reprimidos (↓) bajo cada tratamiento.  Código de colores: verde = NS; azul = padj<0.05 solo; rojo = padj<0.05 y |log$_2$FC|≥1; líneas discontinuas: log$_2$FC=±1 y padj=0.05.
+  }
+  \label{fig:S2}
+\end{figure}
+
+
+
+\begin{figure}[ht]
+  \centering
+  \includegraphics[width=0.8\linewidth]{S3.png}%
+  \caption[Diagramas GSEA]{%
+	Diagramas de burbujas (GSEA) de los diez términos de procesos biológicos (BP) más informativos observados en la base de datos de GO en piel de dorada (\textit{Sparus aurata}) para los contrastes (A) Control vs λ-carragenina, (B) SST6 vs Control, (C) Control vs λ-carragenina + SST6.
+ }
+  \label{fig:S3}
+\end{figure}
+
+
+\begin{figure}[ht]
+  \centering
+  \includegraphics[width=0.8\linewidth]{S4.png}%
+  \caption[Diagramas GSEA]{%
+	Diagramas de burbujas (GSEA) de los diez términos de procesos biológicos (BP) más informativos observados en la base de datos de GO en piel de dorada (\textit{Sparus aurata}) para los contrastes (A) λ-carragenina vs SST6, (B) λ-carragenina vs λ-carragenina + SST6, (C) SST6 vs λ-carragenina + SST6.
+ }
+  \label{fig:S4}
+\end{figure}
+
+
+\begin{figure}[ht]
+  \centering
+  \includegraphics[width=0.8\linewidth]{S5.png}%
+  \caption[Diagramas GSEA]{%
+	Diagramas de burbujas (GSEA) de los diez términos de procesos biológicos (BP) más informativos observados en la base de datos de GO en cerebro de dorada (\textit{Sparus aurata}) para los contrastes (A) Control vs λ-carragenina, (B) SST6 vs Control, (C) Control vs λ-carragenina + SST6.
+ }
+  \label{fig:S5}
+\end{figure}
+
+
+\begin{figure}[ht]
+  \centering
+  \includegraphics[width=0.8\linewidth]{S6.png}%
+  \caption[Diagramas GSEA]{%
+	Diagramas de burbujas (GSEA) de los diez términos de procesos biológicos (BP) más informativos observados en la base de datos de GO en cerebro de dorada (\textit{Sparus aurata}) para los contrastes (A) λ-carragenina vs SST6, (B) λ-carragenina vs λ-carragenina + SST6, (C) SST6 vs λ-carragenina + SST6.
+ }
+  \label{fig:S6}
+\end{figure}
+
+
+
+\begin{figure}[ht]
+  \centering
+  \includegraphics[width=0.8\linewidth]{S7.png}%
+  \caption[Diagramas GSEA]{%
+	Diagramas de burbujas (GSEA) de los diez términos más informativos observados en la base de datos de KEGG en piel de dorada (\textit{Sparus aurata}) para los contrastes (A) Control vs λ-carragenina, (B) SST6 vs Control, (C) Control vs λ-carragenina + SST6.
+ }
+  \label{fig:S7}
+\end{figure}
+
+
+\begin{figure}[ht]
+  \centering
+  \includegraphics[width=0.8\linewidth]{S8.png}%
+  \caption[Diagramas GSEA]{%
+	Diagramas de burbujas (GSEA) de los diez términos más informativos observados en la base de datos de KEGG en piel de dorada (\textit{Sparus aurata}) para los contrastes (A) λ-carragenina vs SST6, (B) λ-carragenina vs λ-carragenina + SST6, (C) SST6 vs λ-carragenina + SST6.
+ }
+  \label{fig:S8}
+\end{figure}
+
+\begin{figure}[ht]
+  \centering
+  \includegraphics[width=0.8\linewidth]{S15.png}%
+  \caption[Diagramas GSEA]{%
+	Detalle de rutas KEGG en la piel de dorada (\textit{S.\ aurata}), donde cada rectángulo representa un gen y se colorean por su nivel de log₂FC (verde indica un log₂FC negativo y rojo positivo) obtenido en este experimento. (A) Activación de genes del citoesqueleto en células musculares en el contraste de λ-carragenina vs λ-carragenina + SST6, y Ferroptosis en los contrastes (B) λ-carragenina vs SST6 y (C) λ-carragenina vs λ-carragenina + SST6.
+ }
+  \label{fig:S9}
+\end{figure}
+
+
+\begin{figure}[ht]
+  \centering
+  \includegraphics[width=0.8\linewidth]{S9.png}%
+  \caption[Diagramas GSEA]{%
+	Diagramas de burbujas (GSEA) de los diez términos más informativos observados en la base de datos de KEGG en cerebro de dorada (\textit{Sparus aurata}) para los contrastes (A) Control vs λ-carragenina, (B) Control vs λ-carragenina + SST6.
+ }
+  \label{fig:S10}
+\end{figure}
+
+
+\begin{figure}[ht]
+  \centering
+  \includegraphics[width=0.8\linewidth]{S10.png}%
+  \caption[Diagramas GSEA]{%
+	Diagramas de burbujas (GSEA) de los diez términos más informativos observados en la base de datos de KEGG en cerebro de dorada (\textit{Sparus aurata}) para los contrastes (A) λ-carragenina vs SST6, (B) λ-carragenina vs λ-carragenina + SST6.
+ }
+  \label{fig:S11}
+\end{figure}
+
+
+\begin{figure}[ht]
+  \centering
+  \includegraphics[width=0.8\linewidth]{S16.png}%
+  \caption[Diagramas GSEA]{%
+	Detalle de rutas KEGG en el cerebro de dorada (\textit{S.\ aurata}), donde cada rectángulo representa un gen y se colorean por su nivel de log₂FC (verde indica un log₂FC negativo y rojo positivo) obtenido en este experimento. Represión de genes del metabolismo de porfiridinas en los contrastes (A) λ-carragenina vs SST6 y (B) carragenina vs λ-carragenina + SST6.
+ }
+
+  \label{fig:S12}
+\end{figure}
+
+
+\begin{figure}[ht]
+  \centering
+  \includegraphics[width=0.8\linewidth]{S11.png}%
+  \caption[Diagramas GSEA]{%
+	Diagramas de burbujas (GSEA) de los diez términos más informativos observados en la base de datos de Reactome en piel de dorada (\textit{Sparus aurata}) para los contrastes (A) Control vs λ-carragenina, (B) SST6 vs Control, (C) Control vs λ-carragenina + SST6.
+ }
+  \label{fig:S13}
+\end{figure}
+
+
+\begin{figure}[ht]
+  \centering
+  \includegraphics[width=0.8\linewidth]{S12.png}%
+  \caption[Diagramas GSEA]{%
+	Diagramas de burbujas (GSEA) de los diez términos más informativos observados en la base de datos de Reactome en piel de dorada (\textit{Sparus aurata}) para los contrastes (A) λ-carragenina vs SST6, (B) λ-carragenina vs λ-carragenina + SST6, (C) SST6 vs λ-carragenina + SST6.
+ }
+  \label{fig:S14}
+\end{figure}
+
+
+\begin{figure}[ht]
+  \centering
+  \includegraphics[width=0.8\linewidth]{S13.png}%
+  \caption[Diagramas GSEA]{%
+	Diagramas de burbujas (GSEA) de los diez términos más informativos observados en la base de datos de Reactome en cerebro de dorada (\textit{Sparus aurata}) para los contrastes (A) Control vs λ-carragenina, (B) SST6 vs Control, (C) Control vs λ-carragenina + SST6.
+ }
+  \label{fig:S15}
+\end{figure}
+
+
+\begin{figure}[ht]
+  \centering
+  \includegraphics[width=0.8\linewidth]{S14.png}%
+  \caption[Diagramas GSEA]{%
+	Diagramas de burbujas (GSEA) de los diez términos más informativos observados en la base de datos de Reactome en cerebro de dorada  (\textit{Sparus aurata}) para los contrastes (A) λ-carragenina vs SST6, (B) λ-carragenina vs λ-carragenina + SST6, (C) SST6 vs λ-carragenina + SST6.
+ }
+  \label{fig:S16}
+\end{figure}
+
+
+
+\end{document}
